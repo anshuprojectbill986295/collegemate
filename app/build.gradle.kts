@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -39,6 +40,10 @@ android {
 
 dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation(platform("com.google.firebase:firebase-bom:34.9.0"))
+
+    // example
+    implementation("com.google.firebase:firebase-auth")
 
 
 

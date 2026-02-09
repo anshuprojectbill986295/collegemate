@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "896685022921",
+    "project_id": "collegemate-fca5d",
+    "storage_bucket": "collegemate-fca5d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:896685022921:android:e933f16b2bbf25d4f23718",
+        "android_client_info": {
+          "package_name": "com.anshu.collegemate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuwaYh71wRRzUyCg7ESOzX-NRyDO7nEJo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
