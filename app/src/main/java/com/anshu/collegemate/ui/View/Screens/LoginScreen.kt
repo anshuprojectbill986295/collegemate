@@ -3,6 +3,7 @@ package com.anshu.collegemate.ui.View.Screens
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,6 +26,7 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -47,33 +49,42 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.anshu.collegemate.Data.Model.Login.AuthResult
 import com.anshu.collegemate.R
 import com.anshu.collegemate.Utils.GoogleSignInHelper
 import com.anshu.collegemate.ui.ViewModel.AuthViewModel
 
 @Composable
 fun LoginScreen(
-    viewModel: AuthViewModel= AuthViewModel()
+    viewModel: AuthViewModel
 ){
 
 
     val context= LocalContext.current
     val authState by viewModel.authState.collectAsState()
+    Log.e("GH1","")
     val googleHelper = remember{ GoogleSignInHelper(context) }
+    Log.e("GH2","")
 
-// //TODO    val launcher = rememberLauncherForActivityResult(
-//        contract = ActivityResultContracts.StartIntentSenderForResult()
-//    ) { result ->
-//        if (result.resultCode == Activity.RESULT_OK) {
-//            val credential =
-//                googleHelper.oneTapClient.getSignInCredentialFromIntent(result.data)
-//            val idToken = credential.googleIdToken
-//
-//            if (idToken != null) {
-//                viewModel.signInWithGoogle(idToken)
-//            }
-//        }
-//    }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        Log.e("result","${result.resultCode}")
+        if (result.resultCode == Activity.RESULT_OK) {
+
+            Log.e("result","${viewModel.isLoggedIn.value}")
+            val credential =
+                googleHelper.oneTapClient.getSignInCredentialFromIntent(result.data)
+            val idToken = credential.googleIdToken
+
+            if (idToken != null) {
+                Log.e("VM","${viewModel.isLoggedIn.value}")
+                viewModel.signInWithGoogle(idToken)
+                Log.e("VM Button","${viewModel.isLoggedIn.value}")
+            }
+        }
+    }
 
 
 
@@ -148,12 +159,17 @@ fun LoginScreen(
                 , fontWeight = FontWeight.SemiBold)}
             Spacer(Modifier.height(16.dp))
             Button(onClick = {
-//           TODO     googleHelper.oneTapClient.beginSignIn(googleHelper.signInRequest)
-//                    .addOnSuccessListener {
-//                        launcher.launch(
-//                            IntentSenderRequest.Builder(it.pendingIntent.intentSender).build()
-//                        )
-//                    }
+                Log.e("CLICK", "pressed")
+                   googleHelper.oneTapClient.beginSignIn(googleHelper.signInRequest)
+                    .addOnSuccessListener {
+                        Log.e("GH-BEGIN", "success")
+                        launcher.launch(
+                            IntentSenderRequest.Builder(it.pendingIntent.intentSender).build()
+                        )
+                    }
+                       .addOnFailureListener{Log.e("GH-BEGIN-ERROR", it.message ?: "unknown error")}
+                Log.e("After Clicked Button","${viewModel.isLoggedIn.value}")
+
 
             }, modifier = Modifier.clip(RoundedCornerShape(24.dp)),
                 colors = ButtonColors(containerColor = Color(66, 135, 245),
@@ -190,24 +206,34 @@ fun LoginScreen(
         }
 
     }
-//   TODO  when (authState) {
-//        is AuthResult.Loading -> Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){ CircularProgressIndicator(
-//            modifier = Modifier.size(48.dp),
-//            color = Color.Green,
-//            strokeWidth = 6.dp,
-//            trackColor = Color.LightGray,
-//            strokeCap = StrokeCap.Round
-//        )
-//        }
-//        is AuthResult.Success -> {}
-//        is AuthResult.Error -> Text("Login Failed")
-//        else -> {}
-//    }
+     when (authState) {
+        is AuthResult.Loading -> Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){ CircularProgressIndicator(
+            modifier = Modifier.size(48.dp),
+            color = Color.Green,
+            strokeWidth = 6.dp,
+            trackColor = Color.LightGray,
+            strokeCap = StrokeCap.Round
+        )
+        }
+        is AuthResult.Success -> {}
+        is AuthResult.Error -> {
+            val errorMessage = (authState as AuthResult.Error).message
+
+            LaunchedEffect(errorMessage) {
+                Toast.makeText(
+                    context,
+                    errorMessage,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+        else -> {}
+    }
 }
 
-@SuppressLint("ViewModelConstructorInComposable")
-@Preview
-@Composable
-fun nnnnn(){
-    LoginScreen()
-}
+//@SuppressLint("ViewModelConstructorInComposable")
+//@Preview
+//@Composable
+//fun Nnnnn(){
+//    LoginScreen()
+//}

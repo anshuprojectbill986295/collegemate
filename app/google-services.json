@@ -12,7 +12,20 @@
           "package_name": "com.anshu.collegemate"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "896685022921-82rec0ktc3lgips832at9e8fdrqhuehp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.anshu.collegemate",
+            "certificate_hash": "a540ec5c7a6fe2ff9b865f7f8ba342c3315cfe40"
+          }
+        },
+        {
+          "client_id": "896685022921-i22u9tc0mc7jv78ei0bnvee5ebd1tgk0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBuwaYh71wRRzUyCg7ESOzX-NRyDO7nEJo"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "896685022921-i22u9tc0mc7jv78ei0bnvee5ebd1tgk0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

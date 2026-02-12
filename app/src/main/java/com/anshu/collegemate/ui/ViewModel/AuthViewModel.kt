@@ -24,8 +24,9 @@ class AuthViewModel(val repository: AuthRepository= AuthRepository()): ViewModel
             if (result is AuthResult.Success){
                 _isLoggedIn.value=true
                 FcmTokenUtil.saveToken()
-
-
+            }
+            else{
+                _isLoggedIn.value=false
             }
         }
     }
