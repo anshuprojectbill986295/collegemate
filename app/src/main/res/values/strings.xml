@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CollegeMate</string>
+    <string name="web_client_id">
+130627226640-jmnjcsb0r3m7516jke58eg1cto1bnkdg.apps.googleusercontent.com    </string>
 </resources>

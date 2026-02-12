@@ -48,16 +48,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.anshu.collegemate.R
+import com.anshu.collegemate.Utils.GoogleSignInHelper
+import com.anshu.collegemate.ui.ViewModel.AuthViewModel
 
 @Composable
 fun LoginScreen(
-    //TODO viewModel: AuthViewModel
+    viewModel: AuthViewModel= AuthViewModel()
 ){
 
 
     val context= LocalContext.current
-    //TODO val authState by viewModel.authState.collectAsState()
-    //TODO val googleHelper = remember{GoogleSignInHelper(context)}
+    val authState by viewModel.authState.collectAsState()
+    val googleHelper = remember{ GoogleSignInHelper(context) }
 
 // //TODO    val launcher = rememberLauncherForActivityResult(
 //        contract = ActivityResultContracts.StartIntentSenderForResult()
