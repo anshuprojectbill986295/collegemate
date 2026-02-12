@@ -1,8 +1,8 @@
 package com.anshu.collegemate.ui.View.Screens
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.util.Log
+
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
@@ -62,26 +62,19 @@ fun LoginScreen(
 
     val context= LocalContext.current
     val authState by viewModel.authState.collectAsState()
-    Log.e("GH1","")
     val googleHelper = remember{ GoogleSignInHelper(context) }
-    Log.e("GH2","")
 
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartIntentSenderForResult()
     ) { result ->
-        Log.e("result","${result.resultCode}")
         if (result.resultCode == Activity.RESULT_OK) {
-
-            Log.e("result","${viewModel.isLoggedIn.value}")
             val credential =
                 googleHelper.oneTapClient.getSignInCredentialFromIntent(result.data)
             val idToken = credential.googleIdToken
 
             if (idToken != null) {
-                Log.e("VM","${viewModel.isLoggedIn.value}")
                 viewModel.signInWithGoogle(idToken)
-                Log.e("VM Button","${viewModel.isLoggedIn.value}")
             }
         }
     }
@@ -159,16 +152,13 @@ fun LoginScreen(
                 , fontWeight = FontWeight.SemiBold)}
             Spacer(Modifier.height(16.dp))
             Button(onClick = {
-                Log.e("CLICK", "pressed")
                    googleHelper.oneTapClient.beginSignIn(googleHelper.signInRequest)
                     .addOnSuccessListener {
-                        Log.e("GH-BEGIN", "success")
                         launcher.launch(
                             IntentSenderRequest.Builder(it.pendingIntent.intentSender).build()
                         )
                     }
-                       .addOnFailureListener{Log.e("GH-BEGIN-ERROR", it.message ?: "unknown error")}
-                Log.e("After Clicked Button","${viewModel.isLoggedIn.value}")
+                       .addOnFailureListener{ Log.e("GH-BEGIN-ERROR", it.message ?: "unknown error")}
 
 
             }, modifier = Modifier.clip(RoundedCornerShape(24.dp)),

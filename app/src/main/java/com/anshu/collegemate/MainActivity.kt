@@ -15,6 +15,8 @@ import com.anshu.collegemate.ui.View.Screens.LoginScreen
 import com.anshu.collegemate.ui.ViewModel.AuthViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.anshu.collegemate.Data.Model.Login.AuthResult
+import com.anshu.collegemate.ui.ViewModel.UserViewModel
+
 class MainActivity : ComponentActivity() {
     @SuppressLint("StateFlowValueCalledInComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +33,8 @@ class MainActivity : ComponentActivity() {
 
             val isLoggedIn by viewModel.isLoggedIn.collectAsState()
             if (isLoggedIn){
-                Text("Login Successfully")
+                UserViewModel.loadUserProfile()
+                Text("Login Successfully ${UserViewModel.userP.value?.name}")
             }
             else{
                 LoginScreen(viewModel)
