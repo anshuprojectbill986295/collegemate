@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
             val isLoggedIn by viewModel.isLoggedIn.collectAsState()
             if (isLoggedIn){
                 UserViewModel.loadUserProfile()
-                Text("Login Successfully ${UserViewModel.userP.value?.name}")
+                MainView {viewModel.logout()  }
             }
             else{
                 LoginScreen(viewModel)
