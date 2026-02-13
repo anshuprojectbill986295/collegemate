@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.anshu.collegemate.ui.View.Screens.HomeScreen
 
 @Composable
 fun NavigationGraph(navController: NavHostController, modifier: Modifier= Modifier){
@@ -12,7 +13,7 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier= Modifi
 
     NavHost(navController=navController, startDestination = Screens.HomeScreen.route) {
         composable(route= Screens.HomeScreen.route){
-           // HomeScreen()
+            HomeScreen()
         }
         composable(route= Screens.AssignmentTestScreen.route){
             //AssignmentTestScreen()
