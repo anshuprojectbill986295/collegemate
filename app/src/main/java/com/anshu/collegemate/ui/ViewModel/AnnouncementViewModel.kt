@@ -26,7 +26,6 @@ class AnnouncementViewModel(
         repository.saveAnnouncementInFireStore(a)
         Log.e("Abhishshek","Abhsioshe'")
         getAnnouncement()
-
     }
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun fetchTodayCancelAnnouncement(): List<AnnouncementCard>{

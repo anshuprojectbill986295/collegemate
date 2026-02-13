@@ -28,13 +28,15 @@ import com.anshu.collegemate.Navigation.Screens
 import com.anshu.collegemate.ui.View.Others.Bars.BottomBar
 import com.anshu.collegemate.ui.View.Others.Bars.TopBar
 import com.anshu.collegemate.ui.View.Others.DialogBox.LogoutDialog
+import com.anshu.collegemate.ui.View.Others.MBS.AnnouncementMBS
+import com.anshu.collegemate.ui.ViewModel.AnnouncementViewModel
 
 @Composable
 fun MainView(onLogout:()->Unit) {
 
-    //TODO  announcementViewModel: AnnouncementViewModel = viewModel()
-    //TODO  assignmentTestVM: AssignmentTestVM = viewModel()
-    //TODO var showBottomSheet by remember { mutableStateOf(false) }
+    val   announcementViewModel: AnnouncementViewModel = viewModel()
+    //TODO val  assignmentTestVM: AssignmentTestVM = viewModel()
+    var showBottomSheet by remember { mutableStateOf(false) }
     val screen = remember { mutableStateOf<Screens>(Screens.HomeScreen) }
     val showDialog = remember { mutableStateOf(false) }
     val navController = rememberNavController()
@@ -48,42 +50,39 @@ fun MainView(onLogout:()->Unit) {
         topBar = { TopBar(screen.value.title, { showDialog.value = true }) },
         bottomBar = { BottomBar(screen, navController) },
         containerColor = Color.Transparent,
-//  TODO      floatingActionButton = {
-//            if (screen.value.route != Screens.HomeScreen.route) {
-//                ExtendedFloatingActionButton(onClick = {
-//                    showBottomSheet=true
-//                }) {
-//                    Icon(
-//                        painter = painterResource(
-//                            com.example.collegemate.R.drawable
-//                                .add_alert_24dp_75fb4c_fill1_wght400_grad0_opsz24
-//                        ),
-//                        contentDescription = null
-//                    )
-//                }
-//            }
-//        }
+        floatingActionButton = {
+            if (screen.value.route != Screens.HomeScreen.route) {
+                ExtendedFloatingActionButton(onClick = {
+                    showBottomSheet=true
+                }) {
+                    Icon(
+                        painter = painterResource(
+                            R.drawable.add_alert_24dp_75fb4c_fill1_wght400_grad0_opsz24
+                        ),
+                        contentDescription = null
+                    )
+                }
+            }
+        }
     )
     {
         Box(
             modifier = Modifier.background(gradient).padding(it).padding(top = 12.dp)
                 .fillMaxSize()
         ) {
-            NavigationGraph(navController, Modifier
-                //TODO, announcementViewModel
-            )
+            NavigationGraph(navController, Modifier, announcementViewModel)
             LogoutDialog(showDialog, { onLogout() })
 
 
             //For Announcement Screen
-//        TODO     if (showBottomSheet){
-//                if (screen.value.route== Screens.NotificationHistoryScreen.route){
-//                    AnnouncementMBS(announcementViewModel,onDismiss = {showBottomSheet=false})
-//                }
-//                else if(screen.value.route== Screens.AssignmentTestScreen.route){
+             if (showBottomSheet){
+                if (screen.value.route== Screens.NotificationHistoryScreen.route){
+                    AnnouncementMBS(announcementViewModel,onDismiss = {showBottomSheet=false})
+                }
+//       TODO         else if(screen.value.route== Screens.AssignmentTestScreen.route){
 //                    AssignmentTestMBS(assignmentTestVM,onDismiss = {showBottomSheet=false})
 //                }
-//            }
+            }
 
         }
 
