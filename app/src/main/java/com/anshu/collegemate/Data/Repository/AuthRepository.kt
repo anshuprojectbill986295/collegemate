@@ -15,6 +15,10 @@ class AuthRepository(
             val result = auth.signInWithCredential(credentials).await()
             val email =result.user?.email?:""
             if(!email.endsWith("@nitap.ac.in")){
+                // If user signs in with a non-institute email,
+                // immediately delete the Firebase account to prevent
+                // storing unauthorized users in Authentication.
+
                 auth.currentUser?.delete()
                 auth.signOut()
                 return AuthResult.Error("Please sign in with your institute email.")
