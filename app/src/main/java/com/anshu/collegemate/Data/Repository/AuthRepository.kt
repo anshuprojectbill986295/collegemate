@@ -15,8 +15,9 @@ class AuthRepository(
             val result = auth.signInWithCredential(credentials).await()
             val email =result.user?.email?:""
             if(!email.endsWith("@nitap.ac.in")){
+                auth.currentUser?.delete()
                 auth.signOut()
-                return AuthResult.Error("Please use institute Email Id.")
+                return AuthResult.Error("Please sign in with your institute email.")
             }
             val userId = result.user?.uid ?:""
             AuthResult.Success(userId)
