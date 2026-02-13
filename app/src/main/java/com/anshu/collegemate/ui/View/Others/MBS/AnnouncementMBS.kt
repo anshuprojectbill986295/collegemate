@@ -92,12 +92,11 @@ fun AnnouncementMBS(viewModel: AnnouncementViewModel, onDismiss:()->Unit){
                     horizontalAlignment = Alignment
                         .CenterHorizontally, verticalArrangement = Arrangement.Center
                 ) {
-                    Text("Compose New Announcement")
-
+                    Text("📢 Post a quick update")
                     OutlinedTextField(
                         value = textGeneral,
                         onValueChange = { textGeneral = it },
-                        label = { Text("Announcement") })
+                        label = { Text("✍️ What's the update?") })
 
                     Button(onClick = {
                         val a = AnnouncementCard(
