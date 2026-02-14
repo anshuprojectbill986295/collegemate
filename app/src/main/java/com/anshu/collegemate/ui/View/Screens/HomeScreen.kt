@@ -40,6 +40,7 @@ import com.anshu.collegemate.Data.Model.HomeScreen.RoutineSeed
 import com.anshu.collegemate.Utils.DateTimeUtil
 import com.anshu.collegemate.Utils.DateTimeUtil.todayDay
 import com.anshu.collegemate.ui.View.Others.DataCardView.ScheduleCardView
+import com.anshu.collegemate.ui.View.Others.Permission.NotificationPermission
 import com.anshu.collegemate.ui.ViewModel.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,7 +54,7 @@ fun HomeScreen(){
     var dateChoosed by remember { mutableStateOf(0L) }
     var dayChoosed by remember { mutableStateOf("") }
     var datePickerState = rememberDatePickerState()
-    //TODO NotificationPermission()
+    NotificationPermission()
 
 
 

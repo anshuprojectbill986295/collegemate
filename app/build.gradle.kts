@@ -46,7 +46,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation(libs.play.services.auth)
     implementation(libs.coil.compose)
-
+    implementation(libs.firebase.messaging)
 
 
     implementation(libs.androidx.core.ktx)
