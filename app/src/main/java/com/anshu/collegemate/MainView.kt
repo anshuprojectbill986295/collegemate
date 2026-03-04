@@ -30,12 +30,15 @@ import com.anshu.collegemate.ui.View.Others.Bars.TopBar
 import com.anshu.collegemate.ui.View.Others.DialogBox.LogoutDialog
 import com.anshu.collegemate.ui.View.Others.MBS.AnnouncementMBS
 import com.anshu.collegemate.ui.ViewModel.AnnouncementViewModel
+import com.anshu.collegemate.ui.View.Others.MBS.AssignmentTestMBS
+import com.anshu.collegemate.ui.ViewModel.AssignmentTestVM
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainView(onLogout:()->Unit) {
 
-    val   announcementViewModel: AnnouncementViewModel = viewModel()
-    //TODO val  assignmentTestVM: AssignmentTestVM = viewModel()
+    val announcementViewModel: AnnouncementViewModel = viewModel()
+    val assignmentTestVM: AssignmentTestVM = viewModel()
     var showBottomSheet by remember { mutableStateOf(false) }
     val screen = remember { mutableStateOf<Screens>(Screens.HomeScreen) }
     val showDialog = remember { mutableStateOf(false) }
@@ -79,9 +82,9 @@ fun MainView(onLogout:()->Unit) {
                 if (screen.value.route== Screens.NotificationHistoryScreen.route){
                     AnnouncementMBS(announcementViewModel,onDismiss = {showBottomSheet=false})
                 }
-//       TODO         else if(screen.value.route== Screens.AssignmentTestScreen.route){
-//                    AssignmentTestMBS(assignmentTestVM,onDismiss = {showBottomSheet=false})
-//                }
+                else if(screen.value.route== Screens.AssignmentTestScreen.route){
+                    AssignmentTestMBS(assignmentTestVM,onDismiss = {showBottomSheet=false})
+                }
             }
 
         }

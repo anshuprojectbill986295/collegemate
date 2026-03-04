@@ -21,10 +21,10 @@ fun AssignmentTestScreen(assTestVm: AssignmentTestVM = AssignmentTestVM()){
     val testList by assTestVm.testList.collectAsState()
     val assList by assTestVm.assList.collectAsState()
     Column() {
-        Text("I am visible   length of asslist   ${testList.size}")
+        Text("I am vis  length of asslist   ${testList.size}")
         LazyColumn() {
             items(assList){
-                // Text("I am visible   length of asslist   ${testList.size}")
+                Text("I am visible   length of asslist   ${testList.size}")
                 Text(text = it.subjectName)
                 Text(it.questionText)
                 Text(it.subjectName)
