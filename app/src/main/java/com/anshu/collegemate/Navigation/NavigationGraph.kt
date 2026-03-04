@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.anshu.collegemate.ui.View.Screens.AssignmentTestScreen
 import com.anshu.collegemate.ui.View.Screens.HomeScreen
 import com.anshu.collegemate.ui.View.Screens.NotificationHistoryScreen
 import com.anshu.collegemate.ui.ViewModel.AnnouncementViewModel
@@ -18,7 +19,7 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier= Modifi
             HomeScreen()
         }
         composable(route= Screens.AssignmentTestScreen.route){
-            //AssignmentTestScreen()
+            AssignmentTestScreen()
         }
         composable(route= Screens.NotificationHistoryScreen.route){
            NotificationHistoryScreen(announcementViewModel)
