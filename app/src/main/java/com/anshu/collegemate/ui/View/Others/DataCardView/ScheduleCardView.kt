@@ -57,6 +57,7 @@ fun ScheduleCardView(scd: ScheduleCardData){
                     Text(text = DateTimeUtil.convert(scd.startTime)+"-"+DateTimeUtil.convert(scd.endTime), fontFamily = FontFamily.SansSerif, fontWeight = FontWeight(700), fontSize = 12.sp, color = Color(cardColorScheme.timingContentColor), softWrap = false)
                 }
             }
+            Text(text = scd.subjectCode, fontFamily = FontFamily.SansSerif, fontSize = 14.sp, fontWeight = FontWeight(500), modifier = Modifier.padding(bottom = 8.dp), color = Color(cardColorScheme.instructorColor))
             Text(text = scd.instructor, fontFamily = FontFamily.SansSerif, fontSize = 14.sp, fontWeight = FontWeight(500), modifier = Modifier.padding(bottom = 8.dp), color = Color(cardColorScheme.instructorColor))
             Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
                 Row(modifier = Modifier.padding(top = 12.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -93,5 +94,5 @@ fun ScheduleCardView(scd: ScheduleCardData){
 @Preview(showBackground = true)
 @Composable
 fun SCVPreview(){
-    ScheduleCardView(RoutineSeed.mondayClasses.get(0))
+    ScheduleCardView(RoutineSeed.mondayClasses.get(3))
 }
