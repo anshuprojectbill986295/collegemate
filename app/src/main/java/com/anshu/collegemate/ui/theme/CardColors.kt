@@ -1,14 +1,28 @@
 package com.anshu.collegemate.ui.theme
 
 import android.graphics.Color.rgb
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.toColorLong
+import androidx.core.graphics.alpha
+
 data class CardColors(
     val colorKey: String,
     val nameColor: Int, val instructorColor: Int,
     val roomNoColor: Int, val progressBarColor: Int=0,
     val timingContentColor: Int, val timingBackgroundColor: Int,
-    val cardBackgroundColor: Int
+    val cardBackgroundColor: Int,
+    val dueTimeColor:Int=rgb(255,0,0),
+    val viewAssignmentButton:Int =rgb(249,115,22),
+    val lessFocusElementColor:Int=Color.DarkGray.toArgb(),
+    val assignmentWordContentColor:Int =timingContentColor,
+    val assignmentWordContainerColor: Int =timingBackgroundColor,
+    val viewDetailsButton:Int = Color(0xff6c3ce0).toArgb()
+
 )
 
+
+//Now CCS is also used for AssignmentTest Card.
 object CardColorsScheme{
 
     val BLUETHEME = CardColors(colorKey = "BLUETHEME",
@@ -34,7 +48,8 @@ object CardColorsScheme{
         progressBarColor = rgb(251, 146, 60),
         timingContentColor = rgb(120, 53, 15),
         timingBackgroundColor = rgb(254, 215, 170),
-        cardBackgroundColor = rgb(255, 237, 213)
+        cardBackgroundColor = rgb(255, 237, 213),
+        dueTimeColor = rgb(255,0,0)
     )
     val PURPLETHEME = CardColors(colorKey = "PURPLETHEME",
         nameColor = rgb(88, 28, 135),
