@@ -28,7 +28,7 @@ import com.anshu.collegemate.Data.Model.Announcement.AnnouncementCard
 import com.anshu.collegemate.Utils.DateTimeUtil
 import com.anshu.collegemate.ui.ViewModel.UserViewModel
 import com.anshu.collegemate.ui.theme.CardColorsScheme
-
+import androidx.compose.runtime.collectAsState
 
 
 @Composable
@@ -44,7 +44,7 @@ fun AnnouncementCardView(ac: AnnouncementCard){
                 CardDefaults.cardElevation(defaultElevation = 8.dp)) {
             Column(modifier = Modifier.padding(10.dp).fillMaxWidth()){
                 Row( modifier = Modifier.fillMaxWidth().padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                    AsyncImage(model = UserViewModel.userP.value?.photoURL, contentDescription = null, modifier = Modifier.size(38.dp).clip(CircleShape))
+                    AsyncImage(model = UserViewModel.userP.collectAsState().value?.photoURL, contentDescription = null, modifier = Modifier.size(38.dp).clip(CircleShape))
                     Column(Modifier.padding(start = 10.dp)) { Text("~~"+ac.announcerName, fontSize = 14.sp, fontWeight = FontWeight(600),color = Color(cardColorScheme.roomNoColor))
                         Text(DateTimeUtil.toTitleCase(DateTimeUtil.getTimeAgo(ac.createdAt)), fontSize = 12.sp, modifier = Modifier.padding(start =15.dp))}
 
@@ -68,7 +68,7 @@ fun AnnouncementCardView(ac: AnnouncementCard){
                 CardDefaults.cardElevation(defaultElevation = 8.dp)) {
             Column(modifier = Modifier.padding(10.dp).fillMaxWidth()){
                 Row( modifier = Modifier.fillMaxWidth().padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                    AsyncImage(model = UserViewModel.userP.value?.photoURL, contentDescription = null, modifier = Modifier.size(38.dp).clip(CircleShape))
+                    AsyncImage(model = UserViewModel.userP.collectAsState().value?.photoURL, contentDescription = null, modifier = Modifier.size(38.dp).clip(CircleShape))
                     Column(Modifier.padding(start = 10.dp)) { Text("~~"+ac.announcerName, fontSize = 14.sp, fontWeight = FontWeight(600),color = Color(cardColorScheme.roomNoColor))
                         Text(DateTimeUtil.toTitleCase(DateTimeUtil.getTimeAgo(ac.createdAt)), fontSize = 12.sp, modifier = Modifier.padding(start =15.dp))}
 

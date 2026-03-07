@@ -89,7 +89,8 @@ fun HomeScreen(){
                     ), fontWeight = FontWeight(800), fontSize = 15.sp
                 )
             }
-            Card(shape = RoundedCornerShape(20.dp), modifier = Modifier.fillMaxWidth()) {
+            Box( modifier = Modifier.fillMaxWidth().background(
+                Color.Transparent)) {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
                     Button(onClick = {
                         today= DateTimeUtil.todayDay().lowercase()
