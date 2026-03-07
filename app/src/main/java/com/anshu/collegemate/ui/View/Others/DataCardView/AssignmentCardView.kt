@@ -1,5 +1,7 @@
 package com.anshu.collegemate.ui.View.Others.DataCardView
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,14 +37,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.anshu.collegemate.Data.Model.AssignmentTest.AssignmentCard
+import com.anshu.collegemate.Data.Model.AssignmentTest.TimelineItem
 import com.anshu.collegemate.R
+import com.anshu.collegemate.Utils.DateTimeUtil
+import com.anshu.collegemate.ui.ViewModel.UserViewModel
 import com.anshu.collegemate.ui.theme.CardColorsScheme
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AssignmentCardView(){
+fun AssignmentCardView(ac: TimelineItem.AssignmentItem){
     val cardCS = CardColorsScheme.ORANGETHEME
-    Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(25.dp), colors = CardDefaults.cardColors(containerColor = Color(cardCS.cardBackgroundColor))) {
-        Column(modifier = Modifier.padding(16.dp)) {
+    Card(Modifier.fillMaxWidth().padding(bottom = 12.dp,top=5.dp), shape = RoundedCornerShape(25.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(cardCS.cardBackgroundColor))) {
+        Column(modifier = Modifier.padding(12.dp)) {
             Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
                 Box(modifier = Modifier.clip(RoundedCornerShape(26.dp))
                     .background(color = Color(cardCS.assignmentWordContainerColor))){
@@ -54,12 +61,11 @@ fun AssignmentCardView(){
 
             }
             Spacer(Modifier.height(10.dp))
-            Text(text = "Data Structures & Algorithms", fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
-            Text(text = "CS301", color = Color(cardCS.instructorColor))
+            Text(text = ac.assignment.subjectName, fontWeight = FontWeight.ExtraBold,
+                fontSize = 20.sp)
+            Text(text = ac.assignment.subjectCode, color = Color(cardCS.instructorColor))
             Spacer(Modifier.height(9.dp))
-            Text(text = "Implement a balanced BST and analyze its time " +
-                    "complexity for insertion, deletion, and search " +
-                    "operations.", maxLines = 2, lineHeight = 25.sp
+            Text(text = ac.assignment.questionText, maxLines = 2, lineHeight = 25.sp
                 ,color = Color(cardCS.lessFocusElementColor)
                         ,modifier = Modifier.alpha(0.8f)
             )
@@ -69,7 +75,12 @@ fun AssignmentCardView(){
                 Icon(painter = painterResource(R.drawable.attach_file_24px),
                     contentDescription = null, tint = Color(cardCS.instructorColor))
                 Spacer(Modifier.width(6.dp))
-                Text(text = "Attachment included", color = Color(cardCS.instructorColor))
+                if (ac.assignment.questionImageUrl.isEmpty()){
+                    Text(text = "Attachment Not included", color = Color(cardCS.instructorColor))
+                }
+                else{
+                    Text(text = "Attachment included", color = Color(cardCS.instructorColor))
+                }
             }
             Spacer(Modifier.height(10.dp))
             //TODO Logic waht to show depend on logic
@@ -77,19 +88,20 @@ fun AssignmentCardView(){
                 Icon(painter = painterResource(R.drawable.schedule_24px),
                     contentDescription = null, tint = Color.Red)
                 Spacer(Modifier.width(6.dp))
-                Text(text = "Due Tomorrow", fontWeight = FontWeight.Bold, color = Color.Red)
+                Text(text = "Due "+DateTimeUtil.getHeaderLabel(ac.assignment.lastDateToSubmit), fontWeight = FontWeight.Bold, color = Color.Red)
             }
             Spacer(Modifier.height(15.dp))
             //TODO Logic below is dynacmic but for now static
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "By Admin . 18 March", color = Color(cardCS.lessFocusElementColor)
+            Row(Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically) {
+                Text(text = "~By ${ac.assignment.createdBy.substringBefore(" ")} . ${DateTimeUtil.getHeaderLabel(ac.assignment.createdAt)}", color = Color(cardCS.lessFocusElementColor)
                     ,modifier = Modifier.alpha(0.8f))
                 Button(onClick = {}, colors = ButtonDefaults.buttonColors(
                     containerColor = Color(cardCS.viewAssignmentButton)
                 )) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(text = "View Assignment")
-                        Spacer(Modifier.width(5.dp))
                         Icon(painter = painterResource(R.drawable.
                         arrow_forward_24px),contentDescription = null)
                     }
@@ -99,8 +111,14 @@ fun AssignmentCardView(){
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun ACVPreview(){
-    AssignmentCardView()
+    val ac = AssignmentCard(assignmentId="AU043CZJq6hNErpw7r5L",createdAt=1772636290872,createdBy="Anshu Kumar Gupta"
+        ,expiryAt=1772841600000,lastDateToSubmit=1772967600000,questionImageUrl="",questionPdfUrl=""
+                ,questionText="Waterfall method and SDLC CYCLE " ,subjectCode="CS-2201"
+        ,subjectName="Software Engineering")
+    val acTimeline = TimelineItem.AssignmentItem(ac)
+    AssignmentCardView(acTimeline)
 }

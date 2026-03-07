@@ -1,12 +1,25 @@
 package com.anshu.collegemate.ui.ViewModel
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
+import androidx.compose.runtime.LongState
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anshu.collegemate.Data.Model.AssignmentTest.AssignmentCard
 import com.anshu.collegemate.Data.Model.AssignmentTest.TestCard
+import com.anshu.collegemate.Data.Model.AssignmentTest.TimelineItem
 import com.anshu.collegemate.Data.Repository.AssignmentTestRepository
+import com.anshu.collegemate.Utils.DateTimeUtil
+import com.google.firebase.auth.MultiFactorAssertion
+import com.google.type.Date
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class AssignmentTestVM(
@@ -18,29 +31,52 @@ class AssignmentTestVM(
     private val _assList = MutableStateFlow<List<AssignmentCard>>(emptyList())
     val assList: StateFlow<List<AssignmentCard>> = _assList
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    val map: StateFlow<Map<String,List<TimelineItem>>> = combine(_testList,_assList){
+        tests,ass->
+
+        val testItems = tests.filter { it.testDate>= System.currentTimeMillis() }.map {
+            TimelineItem.TestItem(it)
+        }
+        val assItems = ass.filter { it.lastDateToSubmit>= System.currentTimeMillis() }.map {
+            TimelineItem.AssignmentItem(it)
+        }
+        val mergedSortedItems = (testItems+assItems).sortedBy { it.eventDate }
+        mergedSortedItems.groupBy { DateTimeUtil.getHeaderLabel(it.eventDate) }
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        emptyMap()
+    )
+    @RequiresApi(Build.VERSION_CODES.O)
     fun addTest(test: TestCard){
         viewModelScope.launch {
             assignmentTestRepository.addTest(test)
             fetchAllTest()
         }
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     fun fetchAllTest(){
         viewModelScope.launch {
             _testList.value=assignmentTestRepository.fetchAllTest()
         }
+        Log.e("TestMap","${map.value.size}")
     }
 
     //For Assignment
+    @RequiresApi(Build.VERSION_CODES.O)
     fun addAssignment(ass: AssignmentCard){
         viewModelScope.launch {
             assignmentTestRepository.addAssignment(ass)
             fetchAssignment()
         }
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     fun fetchAssignment(){
         viewModelScope.launch {
             _assList.value  = assignmentTestRepository.fetchAssignments()
         }
+        Log.e("AssMap","${map.value.size}")
     }
 
 }

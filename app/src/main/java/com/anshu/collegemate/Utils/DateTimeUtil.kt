@@ -2,12 +2,16 @@ package com.anshu.collegemate.Utils
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.collection.IntSet
 import java.text.SimpleDateFormat
 import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDate.now
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
+import java.util.Formatter
 import java.util.Locale
 
 object DateTimeUtil {
@@ -47,15 +51,7 @@ object DateTimeUtil {
                 word.replaceFirstChar { it.uppercase() }
             }
     }
-    fun verifyCollege(email:String,onDefaulter:()-> Unit){
-        var ch=0
-        while (email[ch]!='@'){
-            ch++
-        }
-        if (email[++ch]!='n'){
-            onDefaulter()
-        }
-    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun getDayFromLong(time:Long):String{
         val day= Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).dayOfWeek.
@@ -64,13 +60,16 @@ object DateTimeUtil {
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getDateFromLong(time:Long):String{
-        return  Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("dd MM yyyy"))
+        return  Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault())
+            .format(DateTimeFormatter.ofPattern("dd MM yyyy"))
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getDateMonthFromLong(time: Long):String{
-        return  Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("MMMM  dd"))
+        return  Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault())
+            .format(DateTimeFormatter.ofPattern("dd MMMM"))
 
     }
+    //TODO why this below is here
     fun classCancelledMessage(
         date: String,
         day: String,
@@ -103,6 +102,14 @@ object DateTimeUtil {
                 "$weeks weeks ago"
             }
         }
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getHeaderLabel(time:Long): String{
+        val inputDate = Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).toLocalDate()
+        val todayDate = LocalDate.now()
+        if (inputDate == todayDate) return "Today"
+        else if (inputDate==todayDate.plusDays(1)) return "Tomorrow"
+        else return getDateMonthFromLong(time)
     }
 
 

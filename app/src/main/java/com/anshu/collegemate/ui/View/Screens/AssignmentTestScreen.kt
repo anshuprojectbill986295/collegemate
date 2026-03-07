@@ -1,6 +1,11 @@
 package com.anshu.collegemate.ui.View.Screens
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,39 +27,37 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.anshu.collegemate.Data.Model.AssignmentTest.AssignmentCard
+import com.anshu.collegemate.Data.Model.AssignmentTest.TimelineItem
 import com.anshu.collegemate.ui.View.Others.DataCardView.AssignmentCardView
 import com.anshu.collegemate.ui.View.Others.DataCardView.TestCardView
 import com.anshu.collegemate.ui.ViewModel.AssignmentTestVM
+import java.sql.Time
 
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AssignmentTestScreen(
-    //assTestVm: AssignmentTestVM = AssignmentTestVM()
+    assTestVm: AssignmentTestVM = AssignmentTestVM()
 ){
 
-//    LaunchedEffect(Unit) {
-//        assTestVm.fetchAllTest()
-//        assTestVm.fetchAssignment()
-//    }
-//
-//    val testList by assTestVm.testList.collectAsState()
-//    val assList by assTestVm.assList.collectAsState()
-//    Column(Modifier.fillMaxSize()) {
-//        Text("I am vis  length of asslist   ${testList.size}")
-//        LazyColumn() {
-//            items(assList){
-//                Text("I am visible   length of asslist   ${testList.size}")
-//                Text(text = it.subjectName)
-//                Text(it.questionText)
-//                Text(it.subjectName)
-//            }
-//        }
-//    }
-    Column(modifier = Modifier.fillMaxSize().padding(start = 20.dp,end=20.dp)) {
+    LaunchedEffect(Unit) {
+        assTestVm.fetchAllTest()
+        assTestVm.fetchAssignment()
+    }
+
+    val testList by assTestVm.testList.collectAsState()
+    val assList by assTestVm.assList.collectAsState()
+    val map by assTestVm.map.collectAsState()
+
+    Column(modifier = Modifier.fillMaxSize().padding(start = 14.dp,end=14.dp)) {
     Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth())
     {
         Button(onClick = {}, colors = ButtonDefaults.buttonColors(), border = BorderStroke(width = 2.dp, color = Color.LightGray))
@@ -74,18 +77,40 @@ fun AssignmentTestScreen(
     }
     //TODO My Pattern,,   Today stick and Lazy column for todays entities,
     // but when my today finish Tomorrow stick and then lazy column for Tomorrow and so on.....
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        Text("Today", fontWeight = FontWeight.Bold, color = Color(0xff6C3CE0))
-        Spacer(Modifier.width(8.dp))
-        HorizontalDivider()
-    }
-        Spacer(Modifier.height(12.dp))
-        AssignmentCardView()
-        Spacer(Modifier.height(12.dp))
-        TestCardView()
+        //Text("lksdkjfdsfnh   ${map.size}   ${assList.size}   ${testList.size}  ")
+        LazyColumn() {
+
+//            Log.e("" +
+//                    "","${map.size}")
+
+            map.forEach { (header,list)->
+                stickyHeader{
+                    Row(Modifier.fillMaxWidth().padding(top = 5.dp,bottom=5.dp), verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = header, fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,color = Color(0xff6C3CE0))
+                        Spacer(Modifier.width(8.dp))
+                        HorizontalDivider()
+                    }
+                    //Text("lksdkjfdsfnh")
+                }
+
+                items(list){
+
+                    item->
+                    //("lksdkjfdsfnh")
+                    when(item){
+                        is TimelineItem.TestItem-> TestCardView(item)
+                        is TimelineItem.AssignmentItem-> AssignmentCardView(item)
+                    }
+                }
+            }
+        }
+
 
 }
 }
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun ATPreview(){
