@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlin.collections.map
 
 class AssignmentTestVM(
     private val assignmentTestRepository: AssignmentTestRepository = AssignmentTestRepository()): ViewModel() {
@@ -48,6 +49,38 @@ class AssignmentTestVM(
         SharingStarted.WhileSubscribed(5000),
         emptyMap()
     )
+    @RequiresApi(Build.VERSION_CODES.O)
+    val assMap: StateFlow<Map<String,List<TimelineItem.AssignmentItem>>> = _assList.map {
+        ass->
+        val assItems = ass.filter { it.lastDateToSubmit>= System.currentTimeMillis() }.map {
+            TimelineItem.AssignmentItem(it)
+        }
+       val sortedAssItems = assItems.sortedBy { it.eventDate}
+        sortedAssItems.groupBy { DateTimeUtil.getHeaderLabel(it.eventDate) }
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        emptyMap()
+    )
+    @RequiresApi(Build.VERSION_CODES.O)
+    val testMap: StateFlow<Map<String,List<TimelineItem.TestItem>>> = _testList.map {
+            tests->
+        val testItems = tests.filter { it.testDate>= System.currentTimeMillis() }.map {
+            TimelineItem.TestItem(it)
+        }
+        val sortedTestItems= testItems.sortedBy { it.eventDate }
+        sortedTestItems.groupBy { DateTimeUtil.getHeaderLabel(it.eventDate) }
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        emptyMap()
+    )
+    private val _assByID = MutableStateFlow<TimelineItem.AssignmentItem>(TimelineItem.AssignmentItem(
+        AssignmentCard()))
+    val assByID: StateFlow<TimelineItem.AssignmentItem> = _assByID
+    private val _testByID = MutableStateFlow<TimelineItem.TestItem>(TimelineItem.TestItem(
+        TestCard()))
+    val testByID: StateFlow<TimelineItem.TestItem> = _testByID
     @RequiresApi(Build.VERSION_CODES.O)
     fun addTest(test: TestCard){
         viewModelScope.launch {
@@ -77,6 +110,16 @@ class AssignmentTestVM(
             _assList.value  = assignmentTestRepository.fetchAssignments()
         }
         Log.e("AssMap","${map.value.size}")
+    }
+    fun getAssByID(id:String){
+        viewModelScope.launch {
+            _assByID.value = TimelineItem.AssignmentItem(assignmentTestRepository.getAssByID(id))
+        }
+    }
+    fun getTestByID(id:String){
+        viewModelScope.launch {
+            _testByID.value = TimelineItem.TestItem(assignmentTestRepository.getTestByID(id))
+        }
     }
 
 }

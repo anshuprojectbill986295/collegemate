@@ -15,5 +15,7 @@ data class TestCard(
     val syllabus: String="",
 
     val maxMarks: Int=5,
-    val testType: String="ClassTest"              // Mid Sem / Class Test / End Sem
+    val testType: String="ClassTest",
+    val syllabusImageUrl: String ="",    // null if no image
+    val syllabusPdfUrl: String ="",// Mid Sem / Class Test / End Sem
 )

@@ -1,6 +1,8 @@
 package com.anshu.collegemate.ui.View.Others.MBS
 
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,8 +36,17 @@ import com.anshu.collegemate.Data.Model.HomeScreen.RoutineSeed
 import com.anshu.collegemate.R
 import com.anshu.collegemate.ui.ViewModel.AssignmentTestVM
 import com.anshu.collegemate.ui.ViewModel.UserViewModel
+import java.time.Instant
+import java.time.ZoneId
 import java.util.concurrent.TimeUnit
+enum class steps{
+    TYPE,SUBJECT,DETAILS,REVIEW
+}
+enum class type{
+    TEST,ASSIGNMENT
+}
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AssignmentTestMBS(assTesVM: AssignmentTestVM, onDismiss:()->Unit) {
@@ -52,8 +63,9 @@ fun AssignmentTestMBS(assTesVM: AssignmentTestVM, onDismiss:()->Unit) {
     var testSyllabus by remember { mutableStateOf("Enter Topics or Syllabus for the this Test(Optional)") }
     val context =   LocalContext.current
 
-
     ModalBottomSheet(onDismissRequest = { onDismiss() }) {
+
+
         Column(modifier = Modifier.padding(10.dp)) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
                 Button(onClick = {
@@ -102,7 +114,7 @@ fun AssignmentTestMBS(assTesVM: AssignmentTestVM, onDismiss:()->Unit) {
                             )
                             assTesVM.addTest(tc)
                             Toast.makeText(context,"Test successfully added",Toast.LENGTH_LONG).show()
-
+                            onDismiss()
                         }) {
                             Text("Confirm")
                         }
@@ -179,14 +191,25 @@ fun AssignmentTestMBS(assTesVM: AssignmentTestVM, onDismiss:()->Unit) {
             }
         }
 
-    }
+   }
     if (showDatePicker){
         DatePickerDialog(
             onDismissRequest = { showDatePicker = false },
             confirmButton = {
                 Button(onClick = {
-                    if (selectedButton=="ASSIGNMENT")lastDateOfAssignment = datePickerState.selectedDateMillis ?: 0L
-                    else testDate = datePickerState.selectedDateMillis?:0L
+                    val selectedMillis = datePickerState.selectedDateMillis ?: 0L
+
+                    val endOfDayMillis = Instant.ofEpochMilli(selectedMillis)
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate()
+                        .atTime(23, 59, 59)
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant()
+                        .toEpochMilli()
+                    if (selectedButton=="ASSIGNMENT")lastDateOfAssignment = endOfDayMillis
+                    else {
+                        testDate=endOfDayMillis
+                    }
                     showDatePicker = false
                 }) { Text("Ok") }
             },

@@ -41,7 +41,8 @@ import com.anshu.collegemate.ui.theme.CardColorsScheme
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TestCardView(tc: TimelineItem.TestItem){
+fun TestCardView(tc: TimelineItem.TestItem,
+                 onViewClicked:(id:String,type:String)->Unit){
     val cardCS = CardColorsScheme.GREENTHEME
     Card(Modifier.fillMaxWidth().padding(bottom = 8.dp,top=5.dp), shape = RoundedCornerShape(25.dp),
         colors = CardDefaults.cardColors(containerColor = Color(cardCS.cardBackgroundColor))) {
@@ -104,7 +105,7 @@ fun TestCardView(tc: TimelineItem.TestItem){
                 Text(text = "~By ${tc.test.createdBy.substringBefore(" ")} . " +
                         "${DateTimeUtil.getHeaderLabel(tc.test.createdAt)}", color = Color(cardCS.lessFocusElementColor)
                     ,modifier = Modifier.alpha(0.8f))
-                Button(onClick = {}, colors = ButtonDefaults.buttonColors(
+                Button(onClick = {onViewClicked(tc.test.testId,"TEST")}, colors = ButtonDefaults.buttonColors(
                     containerColor = Color(cardCS.viewDetailsButton)
                 )) {
                     Row(verticalAlignment = Alignment.CenterVertically) {

@@ -45,13 +45,17 @@ import com.anshu.collegemate.ui.theme.CardColorsScheme
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AssignmentCardView(ac: TimelineItem.AssignmentItem){
+fun AssignmentCardView(ac: TimelineItem.AssignmentItem,
+                       onViewClicked:(id:String,type:String)->Unit){
     val cardCS = CardColorsScheme.ORANGETHEME
-    Card(Modifier.fillMaxWidth().padding(bottom = 12.dp,top=5.dp), shape = RoundedCornerShape(25.dp),
+    Card(Modifier
+        .fillMaxWidth()
+        .padding(bottom = 12.dp, top = 5.dp), shape = RoundedCornerShape(25.dp),
         colors = CardDefaults.cardColors(containerColor = Color(cardCS.cardBackgroundColor))) {
         Column(modifier = Modifier.padding(12.dp)) {
             Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                Box(modifier = Modifier.clip(RoundedCornerShape(26.dp))
+                Box(modifier = Modifier
+                    .clip(RoundedCornerShape(26.dp))
                     .background(color = Color(cardCS.assignmentWordContainerColor))){
                     Text(text = "Assignment", fontWeight = FontWeight(700),
                         modifier = Modifier.padding(start = 12.dp,end=12.dp,top=5.dp, bottom = 5.dp)
@@ -92,12 +96,13 @@ fun AssignmentCardView(ac: TimelineItem.AssignmentItem){
             }
             Spacer(Modifier.height(15.dp))
             //TODO Logic below is dynacmic but for now static
+
             Row(Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically) {
                 Text(text = "~By ${ac.assignment.createdBy.substringBefore(" ")} . ${DateTimeUtil.getHeaderLabel(ac.assignment.createdAt)}", color = Color(cardCS.lessFocusElementColor)
                     ,modifier = Modifier.alpha(0.8f))
-                Button(onClick = {}, colors = ButtonDefaults.buttonColors(
+                Button(onClick = { onViewClicked(ac.assignment.assignmentId,"ASSIGNMENT") }, colors = ButtonDefaults.buttonColors(
                     containerColor = Color(cardCS.viewAssignmentButton)
                 )) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -111,14 +116,14 @@ fun AssignmentCardView(ac: TimelineItem.AssignmentItem){
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview
-@Composable
-fun ACVPreview(){
-    val ac = AssignmentCard(assignmentId="AU043CZJq6hNErpw7r5L",createdAt=1772636290872,createdBy="Anshu Kumar Gupta"
-        ,expiryAt=1772841600000,lastDateToSubmit=1772967600000,questionImageUrl="",questionPdfUrl=""
-                ,questionText="Waterfall method and SDLC CYCLE " ,subjectCode="CS-2201"
-        ,subjectName="Software Engineering")
-    val acTimeline = TimelineItem.AssignmentItem(ac)
-    AssignmentCardView(acTimeline)
-}
+//@RequiresApi(Build.VERSION_CODES.O)
+//@Preview
+//@Composable
+//fun ACVPreview(){
+//    val ac = AssignmentCard(assignmentId="AU043CZJq6hNErpw7r5L",createdAt=1772636290872,createdBy="Anshu Kumar Gupta"
+//        ,expiryAt=1772841600000,lastDateToSubmit=1772967600000,questionImageUrl="",questionPdfUrl=""
+//                ,questionText="Waterfall method and SDLC CYCLE " ,subjectCode="CS-2201"
+//        ,subjectName="Software Engineering")
+//    val acTimeline = TimelineItem.AssignmentItem(ac)
+//    AssignmentCardView(acTimeline)
+//}

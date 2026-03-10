@@ -5,6 +5,7 @@ import com.anshu.collegemate.Data.Injections.FireStoreInjection
 import com.anshu.collegemate.Data.Model.AssignmentTest.AssignmentCard
 import com.anshu.collegemate.Data.Model.AssignmentTest.TestCard
 import kotlinx.coroutines.tasks.await
+import kotlin.collections.emptyList
 
 class AssignmentTestRepository {
     private val fs = FireStoreInjection.getFirestore()
@@ -47,5 +48,25 @@ class AssignmentTestRepository {
             emptyList()
         }
 
+    }
+    suspend fun getAssByID(id:String): AssignmentCard{
+        return try{
+            val snapshot = fs.collection("AssignmentTest").document("Assignment")
+                .collection("Assignments").document(id).get().await()
+            snapshot.toObject(AssignmentCard::class.java)?: AssignmentCard()
+        } catch (e: Exception){
+            Log.e("Assignment","Error fucked up fetch")
+            AssignmentCard()
+        }
+    }
+    suspend fun getTestByID(id:String): TestCard{
+        return try{
+            val snapshot = fs.collection("AssignmentTest").document("Test").collection("Tests")
+                .document(id).get().await()
+            snapshot.toObject(TestCard::class.java)?: TestCard()
+        } catch (e: Exception){
+            Log.e("Assignment","Error fucked up fetch")
+            TestCard()
+        }
     }
 }

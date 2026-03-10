@@ -3,6 +3,7 @@ package com.anshu.collegemate.ui.View.Screens
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.collection.emptyLongSet
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -25,6 +26,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -45,74 +49,135 @@ import java.sql.Time
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AssignmentTestScreen(
-    assTestVm: AssignmentTestVM = AssignmentTestVM()
+    assTestVm: AssignmentTestVM = AssignmentTestVM(),
+    onViewClicked:(id:String,type:String)->Unit
 ){
+    var selectedButton  by remember { mutableStateOf(0) }
 
-    LaunchedEffect(Unit) {
+
+    LaunchedEffect(selectedButton) {
         assTestVm.fetchAllTest()
         assTestVm.fetchAssignment()
     }
 
-    val testList by assTestVm.testList.collectAsState()
-    val assList by assTestVm.assList.collectAsState()
+    val testMap by assTestVm.testMap.collectAsState()
+    val assMap by assTestVm.assMap.collectAsState()
     val map by assTestVm.map.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize().padding(start = 14.dp,end=14.dp)) {
     Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth())
     {
-        Button(onClick = {}, colors = ButtonDefaults.buttonColors(), border = BorderStroke(width = 2.dp, color = Color.LightGray))
-        {
-            Text("All", color = Color.White)
+        Button(onClick = {
+            selectedButton=0;
         }
-        Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor =
-            Color.Transparent), border = BorderStroke(width = 2.dp, color = Color.LightGray))
+            , colors =
+            if (selectedButton==0) ButtonDefaults.buttonColors()
+                else ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+            , border = BorderStroke(width = 2.dp, color = Color.LightGray))
         {
-            Text("Assignments", color = Color.Blue)
+            Text("All",
+                color = if (selectedButton==0)Color.White
+                        else Color.Black)
         }
-        Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor =
-            Color.Transparent), border = BorderStroke(width = 2.dp, color = Color.LightGray))
+        Button(onClick = {
+            selectedButton=1;
+        }, colors =
+            if (selectedButton==1) ButtonDefaults.buttonColors()
+            else ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+                    ,border = BorderStroke(width = 2.dp, color = Color.LightGray))
         {
-            Text("Tests", color = Color.Blue)
+            Text("Assignments",
+                color = if (selectedButton==1)Color.White
+                else Color.Black)
+        }
+        Button(onClick = {
+            selectedButton=2;
+        }, colors =
+            if (selectedButton==2) ButtonDefaults.buttonColors()
+            else ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+            , border = BorderStroke(width = 2.dp, color = Color.LightGray))
+        {
+            Text("Tests",
+                color = if (selectedButton==2)Color.White
+                else Color.Black)
         }
     }
-    //TODO My Pattern,,   Today stick and Lazy column for todays entities,
-    // but when my today finish Tomorrow stick and then lazy column for Tomorrow and so on.....
-        //Text("lksdkjfdsfnh   ${map.size}   ${assList.size}   ${testList.size}  ")
+
         LazyColumn() {
-
-//            Log.e("" +
-//                    "","${map.size}")
-
-            map.forEach { (header,list)->
-                stickyHeader{
-                    Row(Modifier.fillMaxWidth().padding(top = 5.dp,bottom=5.dp), verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(text = header, fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,color = Color(0xff6C3CE0))
-                        Spacer(Modifier.width(8.dp))
-                        HorizontalDivider()
+            when(selectedButton){
+                0->{map.forEach { (header,list)->
+                    stickyHeader{
+                        Row(Modifier.fillMaxWidth().padding(top = 5.dp,bottom=5.dp), verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(text = header, fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,color = Color(0xff6C3CE0))
+                            Spacer(Modifier.width(8.dp))
+                            HorizontalDivider()
+                        }
+                        //Text("lksdkjfdsfnh")
                     }
-                    //Text("lksdkjfdsfnh")
-                }
 
-                items(list){
+                    items(list){
 
-                    item->
-                    //("lksdkjfdsfnh")
-                    when(item){
-                        is TimelineItem.TestItem-> TestCardView(item)
-                        is TimelineItem.AssignmentItem-> AssignmentCardView(item)
+                            item->
+                        //("lksdkjfdsfnh")
+                        when(item){
+                            is TimelineItem.TestItem-> TestCardView(item,onViewClicked)
+                            is TimelineItem.AssignmentItem-> AssignmentCardView(item,onViewClicked)
+                        }
+                    }
+                }}
+                1->{
+                    assMap.forEach { (header,assList)->
+                        stickyHeader{
+                            Row(Modifier.fillMaxWidth().padding(top = 5.dp,bottom=5.dp), verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(text = header, fontWeight = FontWeight.Bold,
+                                    fontSize = 18.sp,color = Color(0xff6C3CE0))
+                                Spacer(Modifier.width(8.dp))
+                                HorizontalDivider()
+                            }
+                            //Text("lksdkjfdsfnh")
+                        }
+
+                        items(assList){
+
+                                item->
+                            //("lksdkjfdsfnh")
+                            AssignmentCardView(item,onViewClicked)
+                        }
                     }
                 }
+                2->{testMap.forEach { (header,testList)->
+                    stickyHeader{
+                        Row(Modifier.fillMaxWidth().padding(top = 5.dp,bottom=5.dp), verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(text = header, fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,color = Color(0xff6C3CE0))
+                            Spacer(Modifier.width(8.dp))
+                            HorizontalDivider()
+                        }
+                        //Text("lksdkjfdsfnh")
+                    }
+
+                    items(testList){
+
+                            item->
+                        //("lksdkjfdsfnh")
+                        TestCardView(item,onViewClicked)
+                    }
+                }}
+
             }
+
         }
 
 
 }
 }
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true)
-@Composable
-fun ATPreview(){
-    AssignmentTestScreen()
-}
+//@RequiresApi(Build.VERSION_CODES.O)
+//@Preview(showBackground = true)
+//@Composable
+//fun ATPreview(){
+//    AssignmentTestScreen()
+//}

@@ -43,6 +43,7 @@ import com.anshu.collegemate.ui.View.Others.DataCardView.ScheduleCardView
 import com.anshu.collegemate.ui.View.Others.Permission.NotificationPermission
 import com.anshu.collegemate.ui.ViewModel.UserViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(){
