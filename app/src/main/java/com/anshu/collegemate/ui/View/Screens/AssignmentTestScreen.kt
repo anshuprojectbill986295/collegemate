@@ -38,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.anshu.collegemate.Data.Model.AssignmentTest.AssignmentCard
 import com.anshu.collegemate.Data.Model.AssignmentTest.TimelineItem
 import com.anshu.collegemate.ui.View.Others.DataCardView.AssignmentCardView
@@ -49,17 +50,14 @@ import java.sql.Time
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AssignmentTestScreen(
-    assTestVm: AssignmentTestVM = AssignmentTestVM(),
+    assTestVm: AssignmentTestVM,
     onViewClicked:(id:String,type:String)->Unit
 ){
-    var selectedButton  by remember { mutableStateOf(0) }
-
-
-    LaunchedEffect(selectedButton) {
+    LaunchedEffect(Unit) {
         assTestVm.fetchAllTest()
         assTestVm.fetchAssignment()
     }
-
+    var selectedButton  by remember { mutableStateOf(0) }
     val testMap by assTestVm.testMap.collectAsState()
     val assMap by assTestVm.assMap.collectAsState()
     val map by assTestVm.map.collectAsState()

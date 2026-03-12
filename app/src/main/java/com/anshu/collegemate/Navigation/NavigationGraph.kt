@@ -12,10 +12,12 @@ import com.anshu.collegemate.ui.View.Screens.AssignmentTestScreen
 import com.anshu.collegemate.ui.View.Screens.HomeScreen
 import com.anshu.collegemate.ui.View.Screens.NotificationHistoryScreen
 import com.anshu.collegemate.ui.ViewModel.AnnouncementViewModel
+import com.anshu.collegemate.ui.ViewModel.AssignmentTestVM
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NavigationGraph(navController: NavHostController, modifier: Modifier= Modifier,announcementViewModel: AnnouncementViewModel){
+fun NavigationGraph(navController: NavHostController, modifier: Modifier= Modifier,
+                    announcementViewModel: AnnouncementViewModel,assTestVM: AssignmentTestVM){
 
 
     NavHost(navController=navController, startDestination = Screens.HomeScreen.route) {
@@ -23,7 +25,7 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier= Modifi
             HomeScreen()
         }
         composable(route= Screens.AssignmentTestScreen.route){
-            AssignmentTestScreen(onViewClicked = { id,type->
+            AssignmentTestScreen(assTestVM,onViewClicked = { id,type->
                 navController.navigate(Screens.AssignmentTestDetailedScreen
                     .route+"/${id}/${type}")
             })

@@ -9,8 +9,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -48,12 +50,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.util.concurrent.TimeUnit
 
-enum class steps{
-    TYPE,SUBJECT,DETAILS,REVIEW
-}
-enum class types{
-    TEST,ASSIGNMENT
-}
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,7 +69,7 @@ fun AssignmentTestMBS(assTesVM: AssignmentTestVM, onDismiss:()->Unit) {
     //var testSyllabus by remember { mutableStateOf("Enter Topics or Syllabus for the this Test(Optional)") }
     val context =   LocalContext.current
     var currentStep by remember { mutableStateOf(steps.TYPE) }
-    var type by remember { mutableStateOf<types?>(null) }
+    var type by remember { mutableStateOf<TypesForAssignmentTest>(TypesForAssignmentTest.NONE) }
 
     ModalBottomSheet(onDismissRequest = { onDismiss() }) {
 
@@ -93,23 +90,24 @@ fun AssignmentTestMBS(assTesVM: AssignmentTestVM, onDismiss:()->Unit) {
             }
             steps.DETAILS->{
                 when(type){
-                    types.TEST -> {
-                        TestDetailsStep(type!!,subjectName,contentText,testDate,
+                    TypesForAssignmentTest.TEST -> {
+                        TestDetailsStep(
+                            type,subjectName,contentText,testDate,
                             onSyllabusChange = {contentText=it}, onCalenderClicked = {
                                 showDatePicker = true}, onNextClicked = {currentStep = steps.REVIEW})
                     }
-                    types.ASSIGNMENT -> {AssignmentDetailsStep(
-                        type!!,subjectName,contentText,lastDateOfAssignment,
+                    TypesForAssignmentTest.ASSIGNMENT -> {AssignmentDetailsStep(
+                        type,subjectName,contentText,lastDateOfAssignment,
                         onQuestionChange = {contentText = it}, onCalenderClicked = {
                             showDatePicker = true }, onNextClicked = {
                             currentStep = steps.REVIEW
                         })}
-                    else -> {}
+                    TypesForAssignmentTest.NONE -> {}
                 }
             }
             steps.REVIEW->{
                 when(type){
-                    types.TEST->{
+                    TypesForAssignmentTest.TEST->{
                         ReviewTestDetail(subjectName,subjectCode,contentText,testDate,
                             onConfirm = {
                                 createdBy = UserViewModel.userP.value?.name?:""
@@ -131,7 +129,7 @@ fun AssignmentTestMBS(assTesVM: AssignmentTestVM, onDismiss:()->Unit) {
                                 onDismiss()
                             })
                     }
-                    types.ASSIGNMENT->{
+                    TypesForAssignmentTest.ASSIGNMENT->{
                         ReviewAssignmentDetail(subjectName,subjectCode,contentText,lastDateOfAssignment,
                             onConfirm =
                                 {
@@ -155,7 +153,8 @@ fun AssignmentTestMBS(assTesVM: AssignmentTestVM, onDismiss:()->Unit) {
                                 onDismiss()
                             })
                     }
-                    else -> {}
+
+                    TypesForAssignmentTest.NONE->{}
                 }
 
             }
@@ -196,7 +195,7 @@ fun AssignmentTestMBS(assTesVM: AssignmentTestVM, onDismiss:()->Unit) {
 }
 @Composable
 fun TypeStep(
-    onTypeSelected: (types) -> Unit
+    onTypeSelected: (TypesForAssignmentTest) -> Unit
 ) {
 
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
@@ -206,13 +205,13 @@ fun TypeStep(
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
 
             Button(onClick = {
-                onTypeSelected(types.TEST)
+                onTypeSelected(TypesForAssignmentTest.TEST)
             }) {
                 Text("Test")
             }
 
             Button(onClick = {
-                onTypeSelected(types.ASSIGNMENT)
+                onTypeSelected(TypesForAssignmentTest.ASSIGNMENT)
             }) {
                 Text("Assignment")
             }
@@ -225,7 +224,8 @@ fun SubjectStep(
     subjects: List<ScheduleCardData>,
     onSubjectSelect:(sc: ScheduleCardData)->Unit
 ) {
-    Column() {
+    Column(Modifier.padding(10.dp), horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center) {
         Text("Choose Subject")
     LazyColumn() {
 
@@ -245,7 +245,7 @@ fun SubjectStep(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AssignmentDetailsStep(
-    type: types,
+    type: TypesForAssignmentTest,
     subjectName: String,
     question:String,
     lastDate:Long,
@@ -253,12 +253,14 @@ fun AssignmentDetailsStep(
     onCalenderClicked:()->Unit,
     onNextClicked:()-> Unit
 ){
-    Column() {
+    Column(Modifier.padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center) {
         Text(type.toString()+"."+subjectName)
 
         OutlinedTextField(value = question, onValueChange = {onQuestionChange(it)}
             , label ={Text("Question")})
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically) {
                         IconButton(onClick = {}) {
                             Icon(
                                 painter = painterResource(R.drawable.image_24px),
@@ -273,7 +275,8 @@ fun AssignmentDetailsStep(
                         }
 
                     }
-        Row() {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically) {
             Text("Last Date")
             Button(onClick = {
                 onCalenderClicked()}) {
@@ -295,7 +298,7 @@ fun AssignmentDetailsStep(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TestDetailsStep(
-    type: types,
+    type: TypesForAssignmentTest,
     subjectName: String,
     syllabus:String,
     testDate:Long,
@@ -303,12 +306,14 @@ fun TestDetailsStep(
     onCalenderClicked:()-> Unit,
     onNextClicked:()->Unit
 ){
-    Column() {
+    Column(Modifier.padding(10.dp), horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center) {
         Text(type.toString()+"."+subjectName)
 
         OutlinedTextField(value = syllabus, onValueChange = {onSyllabusChange(it)}
             , label ={Text("Question")})
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth().padding(10.dp), horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = {}) {
                 Icon(
                     painter = painterResource(R.drawable.image_24px),
@@ -323,8 +328,10 @@ fun TestDetailsStep(
             }
 
         }
-        Row() {
+        Row(modifier = Modifier.fillMaxWidth().padding(10.dp), horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically) {
             Text("Last Date")
+            Spacer(Modifier.width(10.dp))
             Button(onClick = {
                 onCalenderClicked()}) {
                 if(testDate ==0L){
@@ -352,8 +359,9 @@ fun ReviewTestDetail(
     onConfirm:()->Unit,
     onCancel:()-> Unit
 ){
-            Column(Modifier.padding(10.dp)) {
-                Text("TEST . $subjectName$subjectCode")
+            Column(Modifier.padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center) {
+                Text("TEST . ${subjectName}  ${subjectCode}")
                 Text(syllabus)
                 Text("Attachment Included")
                 Text(DateTimeUtil.getDateMonthFromLong(testDate))
@@ -377,8 +385,9 @@ fun ReviewAssignmentDetail(
     onConfirm:()->Unit,
     onCancel:()-> Unit
 ){
-    Column(Modifier.padding(10.dp)) {
-        Text("ASSIGNMENT . "+subjectName+subjectCode)
+    Column(Modifier.padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center) {
+        Text("ASSIGNMENT . "+subjectName+"  "+subjectCode)
         Text(question)
         Text("Attachment Included")
         Text(DateTimeUtil.getDateMonthFromLong(lastDate))

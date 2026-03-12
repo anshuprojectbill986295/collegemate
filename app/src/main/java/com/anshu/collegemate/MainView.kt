@@ -73,7 +73,7 @@ fun MainView(onLogout:()->Unit) {
             modifier = Modifier.background(gradient).padding(it).padding(top = 12.dp)
                 .fillMaxSize()
         ) {
-            NavigationGraph(navController, Modifier, announcementViewModel)
+            NavigationGraph(navController, Modifier, announcementViewModel,assignmentTestVM)
             LogoutDialog(showDialog, { onLogout() })
 
 
