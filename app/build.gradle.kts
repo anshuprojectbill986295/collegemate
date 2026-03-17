@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.play.services.auth)
     implementation(libs.coil.compose)
     implementation(libs.firebase.messaging)
+    implementation(libs.firebase.storage)
 
 
     implementation(libs.androidx.core.ktx)
