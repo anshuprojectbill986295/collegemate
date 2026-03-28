@@ -1,9 +1,9 @@
 package com.anshu.collegemate.ui.View.Others.MBS
 
-import android.net.wifi.p2p.WifiP2pGroup
 import android.os.Build
-import android.sax.RootElement
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,6 +38,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.FileProvider
 import androidx.core.content.contentValuesOf
 import com.anshu.collegemate.Data.Model.AssignmentTest.AssignmentCard
 import com.anshu.collegemate.Data.Model.AssignmentTest.TestCard
@@ -49,13 +51,27 @@ import com.anshu.collegemate.ui.ViewModel.UserViewModel
 import java.time.Instant
 import java.time.ZoneId
 import java.util.concurrent.TimeUnit
-
-
+import android.net.Uri
+import android.util.Log
+import androidx.activity.result.launch
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.runtime.collectAsState
+import androidx.core.net.toUri
+import androidx.navigationevent.compose.rememberNavigationEventState
+import com.anshu.collegemate.Data.Injections.FireStorageInjection
+import com.anshu.collegemate.Data.Model.AssignmentTest.UploadResult
+import com.anshu.collegemate.ui.View.Others.CustomizedButtons.UploadButton
+import com.anshu.collegemate.ui.View.Others.CustomizedButtons.activeSource
+import com.anshu.collegemate.ui.ViewModel.UploadImgPDFVM
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.flow.compose
+import java.io.File
+import kotlin.contracts.contract
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AssignmentTestMBS(assTesVM: AssignmentTestVM, onDismiss:()->Unit) {
+fun AssignmentTestMBS(assTestVM: AssignmentTestVM, onDismiss:()->Unit, uploadImgPDFVM: UploadImgPDFVM) {
     var subjectName by remember { mutableStateOf("") }
     var subjectCode by remember { mutableStateOf("") }
     //contentText works both for test Assignment in TextField
@@ -70,8 +86,14 @@ fun AssignmentTestMBS(assTesVM: AssignmentTestVM, onDismiss:()->Unit) {
     val context =   LocalContext.current
     var currentStep by remember { mutableStateOf(steps.TYPE) }
     var type by remember { mutableStateOf<TypesForAssignmentTest>(TypesForAssignmentTest.NONE) }
+    val result by uploadImgPDFVM.result.collectAsState()
+        //Storage related variables
+//    val uploadButtonClicked by uploadImgPDFVM.uploadButtonClicked.collectAsState()
+
+
 
     ModalBottomSheet(onDismissRequest = { onDismiss() }) {
+
 
         when(currentStep){
             steps.TYPE->{
@@ -98,10 +120,10 @@ fun AssignmentTestMBS(assTesVM: AssignmentTestVM, onDismiss:()->Unit) {
                     }
                     TypesForAssignmentTest.ASSIGNMENT -> {AssignmentDetailsStep(
                         type,subjectName,contentText,lastDateOfAssignment,
-                        onQuestionChange = {contentText = it}, onCalenderClicked = {
+                        onQuestionChange = {contentText = it }, onCalenderClicked = {
                             showDatePicker = true }, onNextClicked = {
-                            currentStep = steps.REVIEW
-                        })}
+                                currentStep = steps.REVIEW},
+                        uploadImgPDFVM=uploadImgPDFVM)}
                     TypesForAssignmentTest.NONE -> {}
                 }
             }
@@ -119,9 +141,10 @@ fun AssignmentTestMBS(assTesVM: AssignmentTestVM, onDismiss:()->Unit) {
                                 createdBy = createdBy,
                                 testDate = testDate,
                                 expiryAt = testDate + TimeUnit.DAYS.toMillis(1),
-                                syllabus = contentText
+                                syllabus = contentText,
+                                syllabusImageUrl = ""
                             )
-                            assTesVM.addTest(tc)
+                            assTestVM.addTest(tc)
                             Toast.makeText(context,"Test successfully added",Toast.LENGTH_LONG).show()
                             onDismiss()
                             },
@@ -142,9 +165,15 @@ fun AssignmentTestMBS(assTesVM: AssignmentTestVM, onDismiss:()->Unit) {
                                 createdBy = createdBy,
                                 createdAt = createdAt,
                                 expiryAt = lastDateOfAssignment + TimeUnit.DAYS.toMillis(1),
-                                lastDateToSubmit = lastDateOfAssignment
+                                lastDateToSubmit = lastDateOfAssignment,
+                                questionImageUrl = if (result is UploadResult.Success &&
+                                    (result as UploadResult.Success).type!= activeSource.FILES){(result as UploadResult.Success).downloadLink}
+                                else {""},
+                                questionFileUrl = if (result is UploadResult.Success &&
+                                    (result as UploadResult.Success).type == activeSource.FILES){(result as UploadResult.Success).downloadLink}
+                                else {""}
                             )
-                            assTesVM.addAssignment(ass)
+                            assTestVM.addAssignment(ass)
                             Toast.makeText(context,"Assignment Successfully Added!",Toast.LENGTH_LONG).show()
                             onDismiss()
 
@@ -231,9 +260,10 @@ fun SubjectStep(
 
         items(subjects) { subject ->
             Row(
-                modifier = Modifier.fillMaxWidth()
-                .padding(25.dp)
-                .clickable(onClick = { onSubjectSelect(subject) })
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(25.dp)
+                    .clickable(onClick = { onSubjectSelect(subject) })
             )
             {
                 Text(subject.name)
@@ -251,30 +281,57 @@ fun AssignmentDetailsStep(
     lastDate:Long,
     onQuestionChange:(newValue:String)->Unit,
     onCalenderClicked:()->Unit,
-    onNextClicked:()-> Unit
+    onNextClicked: ()-> Unit,
+    uploadImgPDFVM: UploadImgPDFVM
 ){
+    val context = LocalContext.current
+    val result by uploadImgPDFVM.result.collectAsState()
+    val isSuccess = result is UploadResult.Success
+    val isUploading = result is UploadResult.Uploading
+    val progress = if (result is UploadResult.Uploading) {
+        (result as UploadResult.Uploading).progress ?: 0f
+    } else {
+        0f
+    }
+    var source by remember { mutableStateOf(activeSource.NONE) }
+    Log.d("isSuccess","${isSuccess}")
+    Log.d("isUploading","${isUploading}")
+
+    val filePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        Log.d("uri","${uri}")
+        if (uri != null) {
+            Log.d("uriNotNull","${uri}")
+
+            uploadImgPDFVM.upload(uri,source)
+
+        }
+        else source = activeSource.NONE
+    }
+    val fileForCamera = File(context.cacheDir, "captured_${System.currentTimeMillis()}.jpg")
+    val fileForCameraURI = FileProvider.getUriForFile(context,
+        "${context.packageName}.provider",fileForCamera)
+    val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
+        isSuccessInCamera->
+        if (isSuccessInCamera){
+            uploadImgPDFVM.upload(fileForCameraURI, source)
+            //fileForCamera.delete()
+        }
+        else{
+            Log.d("Camera Capture failed.","")
+        }
+    }
+
     Column(Modifier.padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
         Text(type.toString()+"."+subjectName)
 
         OutlinedTextField(value = question, onValueChange = {onQuestionChange(it)}
             , label ={Text("Question")})
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically) {
-                        IconButton(onClick = {}) {
-                            Icon(
-                                painter = painterResource(R.drawable.image_24px),
-                                contentDescription = null
-                            )
-                        }
-                        IconButton(onClick = {}) {
-                            Icon(
-                                painter = painterResource(R.drawable.picture_as_pdf_24px),
-                                contentDescription = null
-                            )
-                        }
-
-                    }
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(horizontalArrangement = Arrangement.Center) { Text("Or Add Question Image or PDF by clicking below buttons")}
+        Spacer(modifier = Modifier.height(10.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically) {
             Text("Last Date")
@@ -289,7 +346,48 @@ fun AssignmentDetailsStep(
             }
 
         }
-        Button(onClick = {onNextClicked()}) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically) {
+            UploadButton("Camera",isUploading,isUploading && source== activeSource.CAMERA,
+                progress,isSuccess && source== activeSource.CAMERA,
+                onClick = {
+                    cameraLauncher.launch(fileForCameraURI)
+                    source = activeSource.CAMERA
+                },R.drawable.photo_camera_24px)
+
+            UploadButton("Photos",isUploading,isUploading && source == activeSource.PHOTOS,
+                progress,isSuccess && source == activeSource.PHOTOS,
+                onClick = {
+                    filePickerLauncher.launch("image/*")
+                    source = activeSource.PHOTOS
+
+                },R.drawable.imagesmode_24px)
+            UploadButton("Files",isUploading,isUploading && source== activeSource.FILES,
+                progress,isSuccess && source== activeSource.FILES,
+                onClick = {
+                    filePickerLauncher.launch("application/*")
+                    source = activeSource.FILES
+
+                },R.drawable.attach_file_24px)
+
+
+
+    }
+
+        Button(enabled = !isUploading, onClick = {
+            Log.d("isSuccess2","${isSuccess}")
+            Log.d("isUploading2","${isUploading}")
+            val hasText = question.trim().isNotEmpty()
+           if (!hasText && !isSuccess){
+               Toast.makeText(context,"Nothing is given as question", Toast.LENGTH_LONG).show()
+           }
+            else if(isUploading){
+               Toast.makeText(context,"Please wait for the file to finish Uploading", Toast.LENGTH_LONG).show()
+           }
+            else{
+                onNextClicked()
+           }
+        }) {
             Text("Next->")
         }
 
@@ -312,7 +410,9 @@ fun TestDetailsStep(
 
         OutlinedTextField(value = syllabus, onValueChange = {onSyllabusChange(it)}
             , label ={Text("Question")})
-        Row(modifier = Modifier.fillMaxWidth().padding(10.dp), horizontalArrangement = Arrangement.Center,
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp), horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = {}) {
                 Icon(
@@ -328,7 +428,9 @@ fun TestDetailsStep(
             }
 
         }
-        Row(modifier = Modifier.fillMaxWidth().padding(10.dp), horizontalArrangement = Arrangement.Center,
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp), horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically) {
             Text("Last Date")
             Spacer(Modifier.width(10.dp))

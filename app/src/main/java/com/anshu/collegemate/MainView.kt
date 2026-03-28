@@ -32,6 +32,7 @@ import com.anshu.collegemate.ui.View.Others.MBS.AnnouncementMBS
 import com.anshu.collegemate.ui.ViewModel.AnnouncementViewModel
 import com.anshu.collegemate.ui.View.Others.MBS.AssignmentTestMBS
 import com.anshu.collegemate.ui.ViewModel.AssignmentTestVM
+import com.anshu.collegemate.ui.ViewModel.UploadImgPDFVM
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -39,6 +40,7 @@ fun MainView(onLogout:()->Unit) {
 
     val announcementViewModel: AnnouncementViewModel = viewModel()
     val assignmentTestVM: AssignmentTestVM = viewModel()
+    val uploadImgPDFVM: UploadImgPDFVM = viewModel()
     var showBottomSheet by remember { mutableStateOf(false) }
     val screen = remember { mutableStateOf<Screens>(Screens.HomeScreen) }
     val showDialog = remember { mutableStateOf(false) }
@@ -83,7 +85,7 @@ fun MainView(onLogout:()->Unit) {
                     AnnouncementMBS(announcementViewModel,onDismiss = {showBottomSheet=false})
                 }
                 else if(screen.value.route== Screens.AssignmentTestScreen.route){
-                    AssignmentTestMBS(assignmentTestVM,onDismiss = {showBottomSheet=false})
+                    AssignmentTestMBS(assignmentTestVM,onDismiss = {showBottomSheet=false},uploadImgPDFVM)
                 }
             }
 

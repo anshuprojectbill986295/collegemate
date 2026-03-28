@@ -84,11 +84,11 @@ fun AssignmentTestDetailedScreen(id:String,type:String,
                         Text(text = "Question Image")
                     }
                 }
-                if (assItem.assignment.questionPdfUrl.isNotEmpty()){
+                if (assItem.assignment.questionFileUrl.isNotEmpty()){
                     Button(onClick = {
                         val intent= Intent(
                             Intent.ACTION_VIEW,
-                            assItem.assignment.questionPdfUrl.toUri()
+                            assItem.assignment.questionFileUrl.toUri()
                         )
                         context.startActivity(intent)
 

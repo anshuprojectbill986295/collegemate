@@ -26,6 +26,8 @@ import kotlin.collections.map
 class AssignmentTestVM(
     private val assignmentTestRepository: AssignmentTestRepository = AssignmentTestRepository()): ViewModel() {
 
+    private var _fileURL = MutableStateFlow<String>("")
+    val fileURL: StateFlow<String> = _fileURL
     private val _testList = MutableStateFlow<List<TestCard>>(emptyList())
     val testList: StateFlow<List<TestCard>> = _testList
 
@@ -120,6 +122,9 @@ class AssignmentTestVM(
         viewModelScope.launch {
             _testByID.value = TimelineItem.TestItem(assignmentTestRepository.getTestByID(id))
         }
+    }
+    fun setFileURL(x:String){
+        _fileURL.value=x
     }
 
 }
