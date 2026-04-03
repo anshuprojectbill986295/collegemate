@@ -10,13 +10,13 @@ data class AssignmentCard(
     val subjectName: String ="",
     val subjectCode: String ="",
 
-    val questionText: String ="",        // null if only image/pdf
-    val questionImageUrl: String ="",    // null if no image
-    val questionFileUrl: String ="",      // null if no pdf
-
-    val createdBy: String ="",            // CR / admin uid
-    val createdAt: Long =0L,              // timestamp
+    val createdBy: String ="",
+    val createdAt: Long =0L,
 
     val lastDateToSubmit:Long= System.currentTimeMillis().plus(24*60*60*1000),
-    val expiryAt: Long  =0L               // expiry timestamp
+    val expiryAt: Long  =0L,
+    val questionText: String ="",
+
+    val questionImageUrl: String ="",
+    val questionFileUrl: String =""
 )

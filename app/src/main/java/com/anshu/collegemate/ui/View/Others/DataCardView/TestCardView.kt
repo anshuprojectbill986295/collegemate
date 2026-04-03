@@ -72,7 +72,7 @@ fun TestCardView(tc: TimelineItem.TestItem,
                         Icon(painter = painterResource(R.drawable.docs_24px),
                         contentDescription = null, modifier = Modifier.height(15.dp))
                         Spacer(Modifier.width(5.dp))
-                    Text(text = tc.test.testType,
+                    Text(text = tc.test.testType.toString(),
                         modifier = Modifier
                         , color = Color(cardCS.assignmentWordContentColor))}}
                 Spacer(Modifier.width(12.dp))

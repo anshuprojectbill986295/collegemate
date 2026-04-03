@@ -1,5 +1,9 @@
 package com.anshu.collegemate.Data.Model.AssignmentTest
 
+enum class TESTTYPE{
+   CLASS_TEST,SURPRISE_TEST
+}
+
 data class TestCard(
     var testId: String="",
 
@@ -9,13 +13,13 @@ data class TestCard(
     val createdBy: String="",            // teacher / admin
     val createdAt: Long=0L,
 
-    val testDate: Long=0L,               // actual test date
+    val testDate: Long=System.currentTimeMillis().plus(24*60*60*1000),               // actual test date
     val expiryAt:Long=0L,    // auto-hide after test
-
     val syllabus: String="",
 
-    val maxMarks: Int=5,
-    val testType: String="ClassTest",
     val syllabusImageUrl: String ="",    // null if no image
-    val syllabusPdfUrl: String ="",// Mid Sem / Class Test / End Sem
+    val syllabusFileUrl: String ="",// Mid Sem / Class Test / End Sem
+
+    val maxMarks: Int=5,
+    val testType:TESTTYPE = TESTTYPE.CLASS_TEST
 )

@@ -81,7 +81,7 @@ fun AssignmentTestMBS(assTestVM: AssignmentTestVM, onDismiss:()->Unit, uploadImg
     val datePickerState = rememberDatePickerState()
     var createdAt by remember { mutableStateOf(0L) }
     var createdBy by remember { mutableStateOf("") }
-    var testDate by remember {mutableStateOf(0L)}
+    //var testDate by remember {mutableStateOf(0L)}
     //var testSyllabus by remember { mutableStateOf("Enter Topics or Syllabus for the this Test(Optional)") }
     val context =   LocalContext.current
     var currentStep by remember { mutableStateOf(steps.TYPE) }
@@ -111,26 +111,17 @@ fun AssignmentTestMBS(assTestVM: AssignmentTestVM, onDismiss:()->Unit, uploadImg
                 }
             }
             steps.DETAILS->{
-                when(type){
-                    TypesForAssignmentTest.TEST -> {
-                        TestDetailsStep(
-                            type,subjectName,contentText,testDate,
-                            onSyllabusChange = {contentText=it}, onCalenderClicked = {
-                                showDatePicker = true}, onNextClicked = {currentStep = steps.REVIEW})
-                    }
-                    TypesForAssignmentTest.ASSIGNMENT -> {AssignmentDetailsStep(
+                    DetailStep(
                         type,subjectName,contentText,lastDateOfAssignment,
                         onQuestionChange = {contentText = it }, onCalenderClicked = {
                             showDatePicker = true }, onNextClicked = {
-                                currentStep = steps.REVIEW},
-                        uploadImgPDFVM=uploadImgPDFVM)}
-                    TypesForAssignmentTest.NONE -> {}
-                }
+                                currentStep = steps.REVIEW },
+                        uploadImgPDFVM=uploadImgPDFVM)
             }
             steps.REVIEW->{
                 when(type){
                     TypesForAssignmentTest.TEST->{
-                        ReviewTestDetail(subjectName,subjectCode,contentText,testDate,
+                        ReviewTestDetail(subjectName,subjectCode,contentText,lastDateOfAssignment,
                             onConfirm = {
                                 createdBy = UserViewModel.userP.value?.name?:""
                             createdAt = System.currentTimeMillis()
@@ -139,10 +130,17 @@ fun AssignmentTestMBS(assTestVM: AssignmentTestVM, onDismiss:()->Unit, uploadImg
                                 subjectCode = subjectCode,
                                 createdAt = createdAt,
                                 createdBy = createdBy,
-                                testDate = testDate,
-                                expiryAt = testDate + TimeUnit.DAYS.toMillis(1),
+                                testDate = if(lastDateOfAssignment==0L)
+                                {System.currentTimeMillis().plus(24*60*60*1000)}
+                                else{lastDateOfAssignment},
+                                expiryAt = lastDateOfAssignment + TimeUnit.DAYS.toMillis(1),
                                 syllabus = contentText,
-                                syllabusImageUrl = ""
+                                syllabusImageUrl = if (result is UploadResult.Success &&
+                                    (result as UploadResult.Success).type!= activeSource.FILES){(result as UploadResult.Success).downloadLink}
+                                else {""},
+                                syllabusFileUrl = if (result is UploadResult.Success &&
+                                    (result as UploadResult.Success).type == activeSource.FILES){(result as UploadResult.Success).downloadLink}
+                                else {""}
                             )
                             assTestVM.addTest(tc)
                             Toast.makeText(context,"Test successfully added",Toast.LENGTH_LONG).show()
@@ -165,7 +163,10 @@ fun AssignmentTestMBS(assTestVM: AssignmentTestVM, onDismiss:()->Unit, uploadImg
                                 createdBy = createdBy,
                                 createdAt = createdAt,
                                 expiryAt = lastDateOfAssignment + TimeUnit.DAYS.toMillis(1),
-                                lastDateToSubmit = lastDateOfAssignment,
+                                lastDateToSubmit = if(lastDateOfAssignment==0L)
+                                {System.currentTimeMillis().plus(24*60*60*1000)}
+                                                   else{lastDateOfAssignment}
+                                ,
                                 questionImageUrl = if (result is UploadResult.Success &&
                                     (result as UploadResult.Success).type!= activeSource.FILES){(result as UploadResult.Success).downloadLink}
                                 else {""},
@@ -206,10 +207,9 @@ fun AssignmentTestMBS(assTestVM: AssignmentTestVM, onDismiss:()->Unit, uploadImg
                         .atZone(ZoneId.systemDefault())
                         .toInstant()
                         .toEpochMilli()
-                    if (type.toString()=="ASSIGNMENT")lastDateOfAssignment = endOfDayMillis
-                    else {
-                        testDate=endOfDayMillis
-                    }
+
+                    lastDateOfAssignment = endOfDayMillis
+
                     showDatePicker = false
                 }) { Text("Ok") }
             },
@@ -274,7 +274,7 @@ fun SubjectStep(
 }
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AssignmentDetailsStep(
+fun DetailStep(
     type: TypesForAssignmentTest,
     subjectName: String,
     question:String,
@@ -334,7 +334,7 @@ fun AssignmentDetailsStep(
         Spacer(modifier = Modifier.height(10.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically) {
-            Text("Last Date")
+            Text("Last Date / Test Date")
             Button(onClick = {
                 onCalenderClicked()}) {
                 if(lastDate==0L){
@@ -393,64 +393,7 @@ fun AssignmentDetailsStep(
 
     }
 }
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun TestDetailsStep(
-    type: TypesForAssignmentTest,
-    subjectName: String,
-    syllabus:String,
-    testDate:Long,
-    onSyllabusChange:(newValue: String)->Unit,
-    onCalenderClicked:()-> Unit,
-    onNextClicked:()->Unit
-){
-    Column(Modifier.padding(10.dp), horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center) {
-        Text(type.toString()+"."+subjectName)
 
-        OutlinedTextField(value = syllabus, onValueChange = {onSyllabusChange(it)}
-            , label ={Text("Question")})
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp), horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = {}) {
-                Icon(
-                    painter = painterResource(R.drawable.image_24px),
-                    contentDescription = null
-                )
-            }
-            IconButton(onClick = {}) {
-                Icon(
-                    painter = painterResource(R.drawable.picture_as_pdf_24px),
-                    contentDescription = null
-                )
-            }
-
-        }
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp), horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically) {
-            Text("Last Date")
-            Spacer(Modifier.width(10.dp))
-            Button(onClick = {
-                onCalenderClicked()}) {
-                if(testDate ==0L){
-                    Text("📅 Select Date")
-                }
-                else{
-                    Text("📅 ${DateTimeUtil.getDateMonthFromLong(testDate)}")
-                }
-            }
-
-        }
-        Button(onClick = {onNextClicked()}) {
-            Text("Next->")
-        }
-
-    }
-}
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ReviewTestDetail(

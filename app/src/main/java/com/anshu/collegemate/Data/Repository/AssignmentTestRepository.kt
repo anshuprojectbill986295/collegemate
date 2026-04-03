@@ -18,6 +18,8 @@ class AssignmentTestRepository {
     }
     suspend fun fetchAllTest():List<TestCard>{
         return try {
+           // Log.e("fetchAllTest","No error in Assignment Test Repository")
+
             val snapshots=fs.collection("AssignmentTest").document("Test").collection("Tests").get().await()
             snapshots.toObjects(TestCard::class.java)
         }

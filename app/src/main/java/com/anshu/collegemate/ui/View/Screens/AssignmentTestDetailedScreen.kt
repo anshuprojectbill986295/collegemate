@@ -1,6 +1,7 @@
 package com.anshu.collegemate.ui.View.Screens
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,26 +37,29 @@ fun AssignmentTestDetailedScreen(id:String,type:String,
                 Text("Syllabus-->"+testItem.test.syllabus)
                 if (testItem.test.syllabusImageUrl.isNotEmpty()){
                     Button(onClick = {
+                        Log.d("XXXX","after click ${testItem.test.syllabusFileUrl}")
                         val intent= Intent(
                             Intent.ACTION_VIEW,
-                            testItem.test.syllabusPdfUrl.toUri()
+                            testItem.test.syllabusImageUrl.toUri()
                         )
                         context.startActivity(intent)
+                        Log.d("XXXX","after click and after execution")
 
                     }) {
-                        Text(text = "Question Image")
+                        Text(text = "Syllabus Image")
                     }
                 }
-                if (testItem.test.syllabusPdfUrl.isNotEmpty()){
+                if (testItem.test.syllabusFileUrl.isNotEmpty()){
                     Button(onClick = {
+                      //  Log.d("XXXX","after click")
                         val intent= Intent(
                             Intent.ACTION_VIEW,
-                            testItem.test.syllabusPdfUrl.toUri()
+                            testItem.test.syllabusFileUrl.toUri()
                         )
                         context.startActivity(intent)
 
                     }) {
-                        Text(text = "Question Pdf")
+                        Text(text = "Syllabus Pdf")
                     }
                 }
 
@@ -74,12 +78,14 @@ fun AssignmentTestDetailedScreen(id:String,type:String,
                 Text("Syllabus-->"+assItem.assignment.questionText)
                 if (assItem.assignment.questionImageUrl.isNotEmpty()){
                     Button(onClick = {
+                        Log.d("YYYY","after click")
+
                         val intent= Intent(
                             Intent.ACTION_VIEW,
                             assItem.assignment.questionImageUrl.toUri()
                         )
                         context.startActivity(intent)
-
+                        Log.d("YYYY","after click and after execution")
                     }) {
                         Text(text = "Question Image")
                     }
