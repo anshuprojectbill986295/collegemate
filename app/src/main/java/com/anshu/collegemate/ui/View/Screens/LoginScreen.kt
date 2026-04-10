@@ -15,9 +15,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -69,11 +69,9 @@ fun LoginScreen(
     LaunchedEffect(authState) {
         when (authState) {
             is AuthResult.Loading -> {
-                // Full-screen loader is now visible – hide button spinner
                 isSigningIn = false
             }
             is AuthResult.Success, is AuthResult.Error -> {
-                // Auth finished – ensure spinner is off
                 isSigningIn = false
             }
             else -> { /* do nothing */ }
@@ -89,7 +87,6 @@ fun LoginScreen(
             val idToken = credential.googleIdToken
 
             if (idToken != null) {
-                // Keep spinner visible until full-screen loader appears
                 viewModel.signInWithGoogle(idToken)
             } else {
                 isSigningIn = false
@@ -97,7 +94,6 @@ fun LoginScreen(
             }
         } else {
             isSigningIn = false
-            // User canceled the One Tap flow
         }
     }
 
@@ -110,13 +106,14 @@ fun LoginScreen(
                     end = Offset(100f, 100f)
                 )
             )
+            .systemBarsPadding() // Pushes content inside the safe area
             .padding(top = 25.dp, bottom = 20.dp)
             .fillMaxSize()
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceAround
+            horizontalAlignment = Alignment.CenterHorizontally
+            // No verticalArrangement here, weights handle the spacing!
         ) {
             // Row for logo
             Row(
@@ -141,155 +138,80 @@ fun LoginScreen(
                     fontWeight = FontWeight.ExtraBold
                 )
             }
-            Spacer(Modifier.height(16.dp))
+
+            Spacer(Modifier.weight(0.5f))
+
             Row {
                 Column(
                     Modifier.size(302.4.dp, 56.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = "Your essential, hassle-free campus",
-                            color = Color(0xFF6b7280),
-                            fontSize = 18.sp,
-                            fontFamily = FontFamily.SansSerif,
-                            fontWeight = FontWeight.Normal
-                        )
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                        Text("Your essential, hassle-free campus", color = Color(0xFF6b7280), fontSize = 18.sp)
                     }
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = "companion.",
-                            color = Color(0xFF6b7280),
-                            fontSize = 18.sp,
-                            fontFamily = FontFamily.SansSerif,
-                            fontWeight = FontWeight.Normal
-                        )
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                        Text("companion.", color = Color(0xFF6b7280), fontSize = 18.sp)
                     }
                 }
             }
-            Spacer(Modifier.height(32.dp))
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
+
+            Spacer(Modifier.weight(1.5f))
+
+            // --- Feature 1 ---
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                 Image(
                     painter = painterResource(R.drawable.outline_circle_notifications_24),
                     contentDescription = "Notification Bell Icon",
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(25.dp))
-                        .background(color = Color(0x1af59e0b))
+                    modifier = Modifier.clip(RoundedCornerShape(25.dp)).background(color = Color(0x1af59e0b))
                 )
                 Column {
-                    Text(
-                        text = "Instant, Clear Schedule Alerts",
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1f2937),
-                        fontSize = 16.sp,
-                        fontFamily = FontFamily.SansSerif
-                    )
-                    Text(
-                        text = "No more lost updates! Get **direct " +
-                                "\nnotifications** for canceled classes or" +
-                                "\nschedule changes—100% clear of" +
-                                "\ngroup chat clutter. ",
-                        fontSize = 14.sp,
-                        fontFamily = FontFamily.SansSerif,
-                        color = Color(0xFF4b5563)
-                    )
+                    Text("Instant, Clear Schedule Alerts", fontWeight = FontWeight.Bold, color = Color(0xFF1f2937), fontSize = 16.sp)
+                    Text("No more lost updates! Get **direct \nnotifications** for canceled classes or\nschedule changes—100% clear of\ngroup chat clutter.", fontSize = 14.sp, color = Color(0xFF4b5563))
                 }
             }
-            Spacer(Modifier.height(20.dp))
 
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
+            Spacer(Modifier.weight(1f))
+
+            // --- Feature 2 ---
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                 Image(
                     painter = painterResource(R.drawable.outline_assignment_24),
                     contentDescription = null,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(25.dp))
-                        .background(color = Color(0x1a4f46e5))
+                    modifier = Modifier.clip(RoundedCornerShape(25.dp)).background(color = Color(0x1a4f46e5))
                 )
                 Column {
-                    Text(
-                        text = "Organized Academic Tracker",
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1f2937),
-                        fontSize = 16.sp,
-                        fontFamily = FontFamily.SansSerif
-                    )
-                    Text(
-                        text = "Automatically track all upcoming " +
-                                "\n**assignment submission dates, test\n" +
-                                "schedules, and the required\n" +
-                                "syllabus** in one unified view.",
-                        fontSize = 14.sp,
-                        fontFamily = FontFamily.SansSerif,
-                        color = Color(0xFF4b5563)
-                    )
+                    Text("Organized Academic Tracker", fontWeight = FontWeight.Bold, color = Color(0xFF1f2937), fontSize = 16.sp)
+                    Text("Automatically track all upcoming \n**assignment submission dates, test\nschedules, and the required\nsyllabus** in one unified view.", fontSize = 14.sp, color = Color(0xFF4b5563))
                 }
             }
-            Spacer(Modifier.height(20.dp))
 
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
+            Spacer(Modifier.weight(1f))
+
+            // --- Feature 3 ---
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                 Image(
                     painter = painterResource(R.drawable.outline_schedule_24),
                     contentDescription = null,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(25.dp))
-                        .background(color = Color(0x1af59e0b))
+                    modifier = Modifier.clip(RoundedCornerShape(25.dp)).background(color = Color(0x1af59e0b))
                 )
                 Column {
-                    Text(
-                        text = "Real-time Schedule Dashboard",
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1f2937),
-                        fontSize = 16.sp,
-                        fontFamily = FontFamily.SansSerif
-                    )
-                    Text(
-                        text = "Forget searching PDFs! Get a **direct,\n" +
-                                "real-time view** of today's schedule\n" +
-                                "immediately upon launching the app.",
-                        fontSize = 14.sp,
-                        fontFamily = FontFamily.SansSerif,
-                        color = Color(0xFF4b5563)
-                    )
+                    Text("Real-time Schedule Dashboard", fontWeight = FontWeight.Bold, color = Color(0xFF1f2937), fontSize = 16.sp)
+                    Text("Forget searching PDFs! Get a **direct,\nreal-time view** of today's schedule\nimmediately upon launching the app.", fontSize = 14.sp, color = Color(0xFF4b5563))
                 }
             }
-            Spacer(Modifier.height(32.dp))
 
-            Row {
-                Text(
-                    text = "Tap to connect and simplify your college life.",
-                    fontSize = 14.sp,
-                    fontFamily = FontFamily.SansSerif,
-                    color = Color(0xFF4b5563)
-                )
-            }
+            Spacer(Modifier.weight(1.5f))
 
-            Spacer(Modifier.height(8.dp))
-            Row {
-                Text(
-                    text = "NOTE: Only your institute email is supported",
-                    color = Color.Red,
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
-            Spacer(Modifier.height(16.dp))
+            Row { Text("Tap to connect and simplify your college life.", fontSize = 14.sp, color = Color(0xFF4b5563)) }
 
-            // Google Sign-In Button with loading state
+            Spacer(Modifier.weight(0.2f))
+
+            Row { Text("NOTE: Only your institute email is supported", color = Color.Red, fontWeight = FontWeight.SemiBold) }
+
+            Spacer(Modifier.weight(0.5f))
+
+            // Google Sign-In Button
             Button(
                 onClick = {
                     if (!isSigningIn) {
@@ -303,11 +225,7 @@ fun LoginScreen(
                             .addOnFailureListener { e ->
                                 Log.e("GH-BEGIN-ERROR", e.message ?: "unknown error")
                                 isSigningIn = false
-                                Toast.makeText(
-                                    context,
-                                    "Sign-in start failed: ${e.message}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                Toast.makeText(context, "Sign-in start failed: ${e.message}", Toast.LENGTH_SHORT).show()
                             }
                     }
                 },
@@ -322,11 +240,7 @@ fun LoginScreen(
             ) {
                 Box {
                     if (isSigningIn) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            color = Color.White,
-                            strokeWidth = 3.dp
-                        )
+                        CircularProgressIndicator(modifier = Modifier.size(24.dp), color = Color.White, strokeWidth = 3.dp)
                     } else {
                         Row(
                             Modifier.width(180.dp),
@@ -336,27 +250,23 @@ fun LoginScreen(
                             Image(
                                 painter = painterResource(R.drawable.google__g__logo),
                                 contentDescription = null,
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(50.dp))
-                                    .background(Color.White)
+                                modifier = Modifier.clip(RoundedCornerShape(50.dp)).background(Color.White)
                             )
                             Text(text = "Continue with Google", color = Color.White)
                         }
                     }
                 }
             }
-            Spacer(Modifier.height(8.dp))
+
+            Spacer(Modifier.weight(0.2f))
+
             Row {
                 Text(
                     text = buildAnnotatedString {
                         append("By signing in, you agree to the College Mate\n      ")
-                        withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
-                            append("Terms of Service")
-                        }
+                        withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) { append("Terms of Service") }
                         append(" and")
-                        withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
-                            append(" Privacy Policy")
-                        }
+                        withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) { append(" Privacy Policy") }
                         append(".")
                     }
                 )

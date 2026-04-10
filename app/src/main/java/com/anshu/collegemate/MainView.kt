@@ -19,7 +19,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
@@ -29,8 +28,8 @@ import com.anshu.collegemate.ui.View.Others.Bars.BottomBar
 import com.anshu.collegemate.ui.View.Others.Bars.TopBar
 import com.anshu.collegemate.ui.View.Others.DialogBox.LogoutDialog
 import com.anshu.collegemate.ui.View.Others.MBS.AnnouncementMBS
-import com.anshu.collegemate.ui.ViewModel.AnnouncementViewModel
 import com.anshu.collegemate.ui.View.Others.MBS.AssignmentTestMBS
+import com.anshu.collegemate.ui.ViewModel.AnnouncementViewModel
 import com.anshu.collegemate.ui.ViewModel.AssignmentTestVM
 import com.anshu.collegemate.ui.ViewModel.UploadImgPDFVM
 
@@ -94,9 +93,4 @@ fun MainView(onLogout:()->Unit) {
 
     }
 }
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true)
-@Composable
-fun nnnn() {
-    MainView { }
-}
+
