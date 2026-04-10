@@ -10,10 +10,13 @@ var x:Int=0
 
 val randomColor = colors[x]
 
+enum class ANNOUNCEMENTTYPE{
+    GENERAL,CANCELLATION,NONE
+}
 
 data class AnnouncementCard(
     val id: String="",
-    val type:String="",
+    val type:ANNOUNCEMENTTYPE = ANNOUNCEMENTTYPE.NONE,
 
     val message:String="",
 
@@ -21,8 +24,12 @@ data class AnnouncementCard(
     val createdAt:Long=0L,
     val colorKey: String = Miscealleneous.getColorForAnnouncement(type),
     //cancel related...
-    val cancelDate:String?=null,
+    val cancelDate:String="",
     val day: String?=null,
-    val subjectCode:String?=null
+    val subjectCode:String?=null,
+    val classStartTime:String="",
+
+
+    val expiryDate: java.util.Date? = null // Add this for TTL
 )
 

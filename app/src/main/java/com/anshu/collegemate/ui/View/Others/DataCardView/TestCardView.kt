@@ -84,6 +84,30 @@ fun TestCardView(tc: TimelineItem.TestItem,
                         modifier = Modifier.padding(start = 12.dp,end=12.dp,top=5.dp, bottom = 5.dp)
                         , color = Color(cardCS.assignmentWordContentColor))}
             }
+
+
+            // Inside TestCardView composable, after the marks row and before the date row:
+            Spacer(Modifier.height(8.dp))
+
+// Attachment indicator
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painter = painterResource(R.drawable.attach_file_24px),
+                    contentDescription = null,
+                    tint = Color(cardCS.instructorColor)
+                )
+                Spacer(Modifier.width(6.dp))
+                if (tc.test.syllabusImageUrl.isEmpty() && tc.test.syllabusFileUrl.isEmpty()) {
+                    Text(text = "No attachment", color = Color(cardCS.instructorColor))
+                } else {
+                    Text(text = "Attachment included", color = Color(cardCS.instructorColor))
+                }
+            }
+
+            Spacer(Modifier.height(10.dp))
+// Date row follows...
+
+
             Spacer(Modifier.height(12.dp))
             //TODO Logic if not attachment then say no and if yes then show
             Row(verticalAlignment = Alignment.CenterVertically) {

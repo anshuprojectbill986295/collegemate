@@ -92,7 +92,9 @@ fun AssignmentTestMBS(assTestVM: AssignmentTestVM, onDismiss:()->Unit, uploadImg
 
 
 
-    ModalBottomSheet(onDismissRequest = { onDismiss() }) {
+    ModalBottomSheet(onDismissRequest = {
+        uploadImgPDFVM.resetUploadState()
+        onDismiss() }) {
 
 
         when(currentStep){
@@ -118,75 +120,82 @@ fun AssignmentTestMBS(assTestVM: AssignmentTestVM, onDismiss:()->Unit, uploadImg
                                 currentStep = steps.REVIEW },
                         uploadImgPDFVM=uploadImgPDFVM)
             }
-            steps.REVIEW->{
-                when(type){
-                    TypesForAssignmentTest.TEST->{
-                        ReviewTestDetail(subjectName,subjectCode,contentText,lastDateOfAssignment,
+
+            // Inside AssignmentTestMBS composable, at steps.REVIEW:
+            steps.REVIEW -> {
+                val hasAttachment = result is UploadResult.Success
+                when (type) {
+                    TypesForAssignmentTest.TEST -> {
+                        ReviewTestDetail(
+                            subjectName, subjectCode, contentText, lastDateOfAssignment,
+                            hasAttachment = hasAttachment,
                             onConfirm = {
                                 createdBy = UserViewModel.userP.value?.name?:""
-                            createdAt = System.currentTimeMillis()
-                            val tc = TestCard(
-                                subjectName = subjectName,
-                                subjectCode = subjectCode,
-                                createdAt = createdAt,
-                                createdBy = createdBy,
-                                testDate = if(lastDateOfAssignment==0L)
-                                {System.currentTimeMillis().plus(24*60*60*1000)}
-                                else{lastDateOfAssignment},
-                                expiryAt = lastDateOfAssignment + TimeUnit.DAYS.toMillis(1),
-                                syllabus = contentText,
-                                syllabusImageUrl = if (result is UploadResult.Success &&
-                                    (result as UploadResult.Success).type!= activeSource.FILES){(result as UploadResult.Success).downloadLink}
-                                else {""},
-                                syllabusFileUrl = if (result is UploadResult.Success &&
-                                    (result as UploadResult.Success).type == activeSource.FILES){(result as UploadResult.Success).downloadLink}
-                                else {""}
-                            )
-                            assTestVM.addTest(tc)
-                            Toast.makeText(context,"Test successfully added",Toast.LENGTH_LONG).show()
-                            onDismiss()
+                                createdAt = System.currentTimeMillis()
+                                val tc = TestCard(
+                                    subjectName = subjectName,
+                                    subjectCode = subjectCode,
+                                    createdAt = createdAt,
+                                    createdBy = createdBy,
+                                    testDate = if(lastDateOfAssignment==0L)
+                                    {System.currentTimeMillis().plus(24*60*60*1000)}
+                                    else{lastDateOfAssignment},
+                                    syllabus = contentText,
+                                    syllabusImageUrl = if (result is UploadResult.Success &&
+                                        (result as UploadResult.Success).type!= activeSource.FILES){(result as UploadResult.Success).downloadLink}
+                                    else {""},
+                                    syllabusFileUrl = if (result is UploadResult.Success &&
+                                        (result as UploadResult.Success).type == activeSource.FILES){(result as UploadResult.Success).downloadLink}
+                                    else {""}
+                                )
+                                assTestVM.addTest(tc)
+                                uploadImgPDFVM.resetUploadState()
+                                Toast.makeText(context,"Test successfully added",Toast.LENGTH_LONG).show()
+                                onDismiss()
+                                // ... existing confirm logic ...
                             },
                             onCancel = {
-                                onDismiss()
-                            })
+                                uploadImgPDFVM.resetUploadState()
+                                onDismiss() }
+                        )
                     }
-                    TypesForAssignmentTest.ASSIGNMENT->{
-                        ReviewAssignmentDetail(subjectName,subjectCode,contentText,lastDateOfAssignment,
-                            onConfirm =
-                                {
-                            createdBy = UserViewModel.userP.value?.name?:""
-                            createdAt = System.currentTimeMillis()
-                            val ass = AssignmentCard(
-                                subjectName = subjectName,
-                                subjectCode = subjectCode,
-                                questionText = contentText,
-                                createdBy = createdBy,
-                                createdAt = createdAt,
-                                expiryAt = lastDateOfAssignment + TimeUnit.DAYS.toMillis(1),
-                                lastDateToSubmit = if(lastDateOfAssignment==0L)
-                                {System.currentTimeMillis().plus(24*60*60*1000)}
-                                                   else{lastDateOfAssignment}
-                                ,
-                                questionImageUrl = if (result is UploadResult.Success &&
-                                    (result as UploadResult.Success).type!= activeSource.FILES){(result as UploadResult.Success).downloadLink}
-                                else {""},
-                                questionFileUrl = if (result is UploadResult.Success &&
-                                    (result as UploadResult.Success).type == activeSource.FILES){(result as UploadResult.Success).downloadLink}
-                                else {""}
-                            )
-                            assTestVM.addAssignment(ass)
-                            Toast.makeText(context,"Assignment Successfully Added!",Toast.LENGTH_LONG).show()
-                            onDismiss()
-
+                    TypesForAssignmentTest.ASSIGNMENT -> {
+                        ReviewAssignmentDetail(
+                            subjectName, subjectCode, contentText, lastDateOfAssignment,
+                            hasAttachment = hasAttachment,
+                            onConfirm = {
+                                createdBy = UserViewModel.userP.value?.name?:""
+                                createdAt = System.currentTimeMillis()
+                                val ass = AssignmentCard(
+                                    subjectName = subjectName,
+                                    subjectCode = subjectCode,
+                                    questionText = contentText,
+                                    createdBy = createdBy,
+                                    createdAt = createdAt,
+                                    lastDateToSubmit = if(lastDateOfAssignment==0L)
+                                    {System.currentTimeMillis().plus(24*60*60*1000)}
+                                    else{lastDateOfAssignment}
+                                    ,
+                                    questionImageUrl = if (result is UploadResult.Success &&
+                                        (result as UploadResult.Success).type!= activeSource.FILES){(result as UploadResult.Success).downloadLink}
+                                    else {""},
+                                    questionFileUrl = if (result is UploadResult.Success &&
+                                        (result as UploadResult.Success).type == activeSource.FILES){(result as UploadResult.Success).downloadLink}
+                                    else {""}
+                                )
+                                assTestVM.addAssignment(ass)
+                                uploadImgPDFVM.resetUploadState()
+                                Toast.makeText(context,"Assignment Successfully Added!",Toast.LENGTH_LONG).show()
+                                onDismiss()
+                                // ... existing confirm logic ...
                             },
                             onCancel = {
-                                onDismiss()
-                            })
+                                uploadImgPDFVM.resetUploadState()
+                                onDismiss() }
+                        )
                     }
-
-                    TypesForAssignmentTest.NONE->{}
+                    TypesForAssignmentTest.NONE -> {}
                 }
-
             }
         }
 
@@ -253,7 +262,7 @@ fun SubjectStep(
     subjects: List<ScheduleCardData>,
     onSubjectSelect:(sc: ScheduleCardData)->Unit
 ) {
-    Column(Modifier.padding(10.dp), horizontalAlignment = Alignment.CenterHorizontally,
+    Column(Modifier.padding(5.dp), horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
         Text("Choose Subject")
     LazyColumn() {
@@ -262,7 +271,7 @@ fun SubjectStep(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(25.dp)
+                    .padding(15.dp)
                     .clickable(onClick = { onSubjectSelect(subject) })
             )
             {
@@ -400,25 +409,23 @@ fun ReviewTestDetail(
     subjectName: String,
     subjectCode: String,
     syllabus: String,
-    testDate:Long,
-    onConfirm:()->Unit,
-    onCancel:()-> Unit
-){
-            Column(Modifier.padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center) {
-                Text("TEST . ${subjectName}  ${subjectCode}")
-                Text(syllabus)
-                Text("Attachment Included")
-                Text(DateTimeUtil.getDateMonthFromLong(testDate))
-                Button(onClick = onConfirm) {
-                    Text("Confirm")
-                }
-                Button(onClick = onCancel) {
-                    Text("Cancel")
-                }
-
-            }
-
+    testDate: Long,
+    hasAttachment: Boolean,
+    onConfirm: () -> Unit,
+    onCancel: () -> Unit
+) {
+    Column(
+        Modifier.padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text("TEST . ${subjectName}  ${subjectCode}")
+        Text(syllabus)
+        Text(if (hasAttachment) "Attachment Included" else "No Attachment")
+        Text(DateTimeUtil.getDateMonthFromLong(testDate))
+        Button(onClick = onConfirm) { Text("Confirm") }
+        Button(onClick = onCancel) { Text("Cancel") }
+    }
 }
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -427,21 +434,20 @@ fun ReviewAssignmentDetail(
     subjectCode: String,
     question: String,
     lastDate: Long,
-    onConfirm:()->Unit,
-    onCancel:()-> Unit
-){
-    Column(Modifier.padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center) {
-        Text("ASSIGNMENT . "+subjectName+"  "+subjectCode)
+    hasAttachment: Boolean,
+    onConfirm: () -> Unit,
+    onCancel: () -> Unit
+) {
+    Column(
+        Modifier.padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text("ASSIGNMENT . " + subjectName + "  " + subjectCode)
         Text(question)
-        Text("Attachment Included")
+        Text(if (hasAttachment) "Attachment Included" else "No Attachment")
         Text(DateTimeUtil.getDateMonthFromLong(lastDate))
-        Button(onClick = onConfirm) {
-            Text("Confirm")
-        }
-        Button(onClick = onCancel) {
-            Text("Cancel")
-        }
+        Button(onClick = onConfirm) { Text("Confirm") }
+        Button(onClick = onCancel) { Text("Cancel") }
     }
-
 }

@@ -76,13 +76,15 @@ fun AssignmentCardView(ac: TimelineItem.AssignmentItem,
             Spacer(Modifier.height(10.dp))
             //TODO Logic if not attachment then say no and if yes then show
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(painter = painterResource(R.drawable.attach_file_24px),
-                    contentDescription = null, tint = Color(cardCS.instructorColor))
+                Icon(
+                    painter = painterResource(R.drawable.attach_file_24px),
+                    contentDescription = null,
+                    tint = Color(cardCS.instructorColor)
+                )
                 Spacer(Modifier.width(6.dp))
-                if (ac.assignment.questionImageUrl.isEmpty()){
-                    Text(text = "Attachment Not included", color = Color(cardCS.instructorColor))
-                }
-                else{
+                if (ac.assignment.questionImageUrl.isEmpty() && ac.assignment.questionFileUrl.isEmpty()) {
+                    Text(text = "No attachment", color = Color(cardCS.instructorColor))
+                } else {
                     Text(text = "Attachment included", color = Color(cardCS.instructorColor))
                 }
             }

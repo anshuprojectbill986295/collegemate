@@ -1,5 +1,6 @@
 package com.anshu.collegemate.ui.View.Screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +21,8 @@ import com.anshu.collegemate.ui.ViewModel.AnnouncementViewModel
 fun NotificationHistoryScreen(viewModel: AnnouncementViewModel = viewModel()) {
 
     val list by viewModel.announcements.collectAsState()
+    //val classCancelledList by viewModel.classCancelledOnDate.collectAsState()
+    Log.d("listLength",list.size.toString())
     val gradient = Brush.linearGradient(colors = listOf(Color(0xfff0f4f8)
         ,Color(0xffe0e7ff)), start = Offset(0f,0f),end= Offset(100f,100f))
 
@@ -30,10 +33,10 @@ fun NotificationHistoryScreen(viewModel: AnnouncementViewModel = viewModel()) {
         .fillMaxSize()
     ){
 
+
         LazyColumn() {
             items(list) {
                 AnnouncementCardView(it)
-
             }
         }
 

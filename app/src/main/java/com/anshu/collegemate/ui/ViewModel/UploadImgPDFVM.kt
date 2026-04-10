@@ -73,5 +73,8 @@ class UploadImgPDFVM(): ViewModel() {
         outputStream.close()
         return file
     }
+    fun resetUploadState(){
+        _result.value= UploadResult.Idle
+    }
 }
 

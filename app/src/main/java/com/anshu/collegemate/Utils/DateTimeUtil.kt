@@ -69,20 +69,14 @@ object DateTimeUtil {
             .format(DateTimeFormatter.ofPattern("dd MMMM"))
 
     }
-    //TODO why this below is here
+
     fun classCancelledMessage(
         date: String,
         day: String,
         subject: String
     ): String {
-        return """
-🚫 Class Cancelled
-📚 $subject
-🗓️ $day • $date
-""".trimIndent()
-
+        return "Your $subject class scheduled on $day, $date is cancelled."
     }
-
     ////////////
     fun getTimeAgo(createdAt:Long):String{
         val diff = System.currentTimeMillis()-createdAt

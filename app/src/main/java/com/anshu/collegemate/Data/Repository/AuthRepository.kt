@@ -14,7 +14,7 @@ class AuthRepository(
         {       val credentials = GoogleAuthProvider.getCredential(idToken,null)
             val result = auth.signInWithCredential(credentials).await()
             val email =result.user?.email?:""
-            if(!email.endsWith("@nitap.ac.in")){
+            if(!email.endsWith("cse.24@nitap.ac.in")){
                 // If user signs in with a non-institute email,
                 // immediately delete the Firebase account to prevent
                 // storing unauthorized users in Authentication.

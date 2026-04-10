@@ -29,12 +29,13 @@ import com.anshu.collegemate.Utils.DateTimeUtil
 import com.anshu.collegemate.ui.ViewModel.UserViewModel
 import com.anshu.collegemate.ui.theme.CardColorsScheme
 import androidx.compose.runtime.collectAsState
+import com.anshu.collegemate.Data.Model.Announcement.ANNOUNCEMENTTYPE
 
 
 @Composable
 fun AnnouncementCardView(ac: AnnouncementCard){
     val cardColorScheme= CardColorsScheme.getCCScheme(ac.colorKey)
-    if (ac.type.contentEquals("general")){
+    if (ac.type == ANNOUNCEMENTTYPE.GENERAL){
         Card(shape = RoundedCornerShape(20.dp),
             modifier = Modifier
                 .fillMaxWidth()

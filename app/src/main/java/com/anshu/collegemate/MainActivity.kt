@@ -18,6 +18,7 @@ import com.anshu.collegemate.ui.ViewModel.AuthViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.anshu.collegemate.Data.Model.Login.AuthResult
 import com.anshu.collegemate.ui.ViewModel.UserViewModel
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -30,7 +31,15 @@ class MainActivity : ComponentActivity() {
         val repository = AuthRepository(auth)
         val viewModel = AuthViewModel(repository)
 
-        //RoutineSeed.uploadRoutineOnce()
+        //val authRepository = AuthRepository()
+
+        // 🛡️ THE SAFETY NET: Only subscribe if they actually have an active session.
+        if (repository.isUserLoggedIn()) {
+            FirebaseMessaging.getInstance().subscribeToTopic("all_announcements")
+        } else {
+            // Just in case a weird glitch happened, forcefully unsubscribe them if they aren't logged in
+            FirebaseMessaging.getInstance().unsubscribeFromTopic("all_announcements")
+        }
 
         setContent {
 

@@ -11,9 +11,15 @@ class AssignmentTestRepository {
     private val fs = FireStoreInjection.getFirestore()
 
     suspend fun addTest(test: TestCard){
+        // Calculate 7 days from now
+        val calendar = java.util.Calendar.getInstance()
+        calendar.add(java.util.Calendar.DAY_OF_YEAR, 7)
+        val sevenDaysFromNow = calendar.time
+
+        val testWithExpiry = test.copy(expiryDate = sevenDaysFromNow)
 
         val docRef = fs.collection("AssignmentTest").document("Test").collection("Tests").document()
-        val testWithId=test.copy(testId = docRef.id)
+        val testWithId=testWithExpiry.copy(testId = docRef.id)
         docRef.set(testWithId).await()
     }
     suspend fun fetchAllTest():List<TestCard>{
@@ -33,10 +39,16 @@ class AssignmentTestRepository {
     //For Assignment
 
     suspend fun addAssignment(ass: AssignmentCard){
+        // Calculate 7 days from now
+        val calendar = java.util.Calendar.getInstance()
+        calendar.add(java.util.Calendar.DAY_OF_YEAR, 7)
+        val sevenDaysFromNow = calendar.time
+
+        val assignWithExpiry = ass.copy(expiryDate = sevenDaysFromNow)
         val docRef = fs.collection("AssignmentTest").document("Assignment").collection("Assignments")
             .document()
 
-        val assWithId=ass.copy(assignmentId = docRef.id)
+        val assWithId=assignWithExpiry.copy(assignmentId = docRef.id)
         docRef.set(assWithId).await()
     }
     suspend fun fetchAssignments():List<AssignmentCard>{

@@ -1,8 +1,10 @@
 package com.anshu.collegemate.ui.View.Others.MBS
 
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,6 +24,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -35,13 +39,17 @@ import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.anshu.collegemate.Data.Model.Announcement.ANNOUNCEMENTTYPE
 import com.anshu.collegemate.Data.Model.Announcement.AnnouncementCard
+import com.anshu.collegemate.Data.Model.Announcement.colors
 import com.anshu.collegemate.Data.Model.HomeScreen.RoutineSeed
 import com.anshu.collegemate.Data.Model.HomeScreen.ScheduleCardData
 import com.anshu.collegemate.Utils.DateTimeUtil
 import com.anshu.collegemate.Utils.DateTimeUtil.getDateFromLong
 import com.anshu.collegemate.ui.ViewModel.AnnouncementViewModel
 import com.anshu.collegemate.ui.ViewModel.UserViewModel
+import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
 
 
@@ -108,7 +116,7 @@ fun AnnouncementMBS(viewModel: AnnouncementViewModel, onDismiss:()->Unit){
                 StepsForGeneral.REVIEW->{
                     GeneralReview(type,textGeneral, onConfirmClicked = {
                         val a = AnnouncementCard(
-                            "", "general", textGeneral, UserViewModel.userP.value!!.name,
+                            "", ANNOUNCEMENTTYPE.GENERAL, textGeneral, UserViewModel.userP.value!!.name,
                             System.currentTimeMillis()
                         )
                         scope.launch {
@@ -137,7 +145,7 @@ fun AnnouncementMBS(viewModel: AnnouncementViewModel, onDismiss:()->Unit){
                     ChooseSubject(cancellationDay, onSubjectClicked = {
                         canceledClass=it
                         currentStepForCancellation = StepsForCancellation.REVIEW
-                    })
+                    },cancellationDate=cancellationDate)
                 }
                 StepsForCancellation.REVIEW->{
                     ReviewCancellation(type,canceledClass, cancellationDate, onConfirmClicked = {
@@ -147,7 +155,7 @@ fun AnnouncementMBS(viewModel: AnnouncementViewModel, onDismiss:()->Unit){
                             canceledClass.name
                         )
                         val announcementCard = AnnouncementCard(
-                            type = "cancel", message = message,
+                            type = ANNOUNCEMENTTYPE.CANCELLATION, message = message,
 
                             announcerName = UserViewModel.userP.value!!.name,
                             createdAt = System.currentTimeMillis(),
@@ -155,8 +163,8 @@ fun AnnouncementMBS(viewModel: AnnouncementViewModel, onDismiss:()->Unit){
                             //cancel related...
                             cancelDate = getDateFromLong(cancellationDate),
                             day = cancellationDay,
-                            subjectCode = canceledClass.subjectCode
-                        )
+                            subjectCode = canceledClass.subjectCode,
+                            classStartTime = canceledClass.startTime)
                         scope.launch {
                             viewModel.saveAnnouncement(announcementCard)
                             Toast.makeText(
@@ -178,7 +186,7 @@ fun AnnouncementMBS(viewModel: AnnouncementViewModel, onDismiss:()->Unit){
             onDismissRequest = { showDatePicker = false },
             confirmButton = {
                 Button(onClick = {
-                    cancellationDate = datePickerState.selectedDateMillis ?: 0L
+                    cancellationDate = datePickerState.selectedDateMillis ?: System.currentTimeMillis()
                     cancellationDay = DateTimeUtil.getDayFromLong(cancellationDate)
                     showDatePicker = false
                 }) { Text("Ok") }
@@ -193,6 +201,7 @@ fun AnnouncementMBS(viewModel: AnnouncementViewModel, onDismiss:()->Unit){
     }
 }
 // For GENERAL
+// For GENERAL
 @Composable
 fun GeneralDetails(
     textGeneral:String,
@@ -203,12 +212,16 @@ fun GeneralDetails(
     Column(Modifier.padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
         Text(type.toString()+".")
-        Text("📢 Post a quick update")
+        Text("📢 Drop the updates") // Slightly more casual
         OutlinedTextField(
             value = textGeneral,
             onValueChange = { onTextFieldValueChange(it)},
-            label = { Text("✍️ What's the update?") })
-        Button(onClick = {onNextClicked()}) {
+            label = { Text("✍️ Spill the tea... (What's happening?)") } // Gen Z hint
+        )
+        Button(
+            onClick = {onNextClicked()},
+            modifier = Modifier.padding(top = 16.dp)
+        ) {
             Text("Next")
         }
     }
@@ -257,22 +270,46 @@ fun DateSelection(
     }
 
 }
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChooseSubject(
     cancellationDay: String,
-    onSubjectClicked:(subject:ScheduleCardData)-> Unit
+    onSubjectClicked:(subject:ScheduleCardData)-> Unit,
+    announcementViewModel: AnnouncementViewModel = viewModel(),
+    cancellationDate: Long
 ){
+    LaunchedEffect(cancellationDay) {
+        announcementViewModel.getClassCancelled(DateTimeUtil.getDateFromLong(cancellationDate))
+    }
+    val classCancelled  = announcementViewModel.classCancelledOnDate.collectAsState()
     Column(Modifier.padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
         Text("Which Class on $cancellationDay?")
-        val classes =
-            RoutineSeed.weeklyRoutine.get(cancellationDay) ?: emptyList()
+        val classes = RoutineSeed.weeklyRoutine[cancellationDay]?:emptyList()
+        Log.e("classToCancel","${classes.size}   ${classes.toString()}   ${classCancelled.value.size}   ${classCancelled.value.toString()}  ")
         LazyColumn() {
-            items(classes) {
-                Row(Modifier.fillMaxWidth()
-                    .clickable(onClick = {onSubjectClicked(it)})
-                    .padding(top = 16.dp)) {
-                    Text(it.name)
+            items(classes) { period ->
+
+                val isThisClassCancelled = classCancelled.value.any { it.classStartTime == period.startTime }
+                if (isThisClassCancelled){
+                    Row(
+                        Modifier.fillMaxWidth()
+                            .padding(top = 16.dp)
+                    ) {
+                        Text(
+                            text = period.name+"~Already cancelled.",
+                            color= Color.Gray
+                        )
+                    }
+                }
+                else{
+                    Row(
+                        Modifier.fillMaxWidth()
+                            .clickable(onClick = { onSubjectClicked(period) })
+                            .padding(top = 16.dp)
+                    ) {
+                        Text(period.name)
+                    }
                 }
             }
         }

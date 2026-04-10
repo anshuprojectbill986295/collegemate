@@ -254,6 +254,8 @@ object RoutineSeed {
         "thursday" to thursdayClasses,
         "friday" to fridayClasses
     )
-    val setOfDistinctClasses = listOf(mondayClasses.get(0),mondayClasses.get(1),mondayClasses.get(2),
-        mondayClasses.get(3),tuesdayClasses.get(1),tuesdayClasses.get(3))
+    val setOfDistinctClasses = listOf(
+        mondayClasses[0], mondayClasses[1], mondayClasses[2],
+        mondayClasses[3], tuesdayClasses[1], tuesdayClasses[3],
+        mondayClasses.last(),wednesdayClasses.last(),thursdayClasses.last(),fridayClasses.last())
 }
