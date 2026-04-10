@@ -2,16 +2,13 @@ package com.anshu.collegemate.Utils
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.collection.IntSet
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDate.now
-import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
-import java.util.Formatter
 import java.util.Locale
 
 object DateTimeUtil {

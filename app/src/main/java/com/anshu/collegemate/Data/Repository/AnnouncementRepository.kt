@@ -1,12 +1,9 @@
 package com.anshu.collegemate.Data.Repository
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import com.anshu.collegemate.Data.Injections.FireStoreInjection
 import com.anshu.collegemate.Data.Model.Announcement.ANNOUNCEMENTTYPE
 import com.anshu.collegemate.Data.Model.Announcement.AnnouncementCard
-import com.anshu.collegemate.Utils.DateTimeUtil
 import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
 
@@ -20,6 +17,7 @@ class AnnouncementRepository {
         val sevenDaysFromNow = calendar.time
 
         val announcementWithExpiry = a.copy(expiryDate = sevenDaysFromNow)
+
             firestore.collection("Announcement").document(a.type.toString()).collection("items")
                 .add(announcementWithExpiry)
                 .addOnSuccessListener { doc ->

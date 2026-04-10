@@ -1,7 +1,5 @@
 package com.anshu.collegemate.ui.View.Others.DataCardView
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,21 +13,20 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.anshu.collegemate.Data.Model.Announcement.ANNOUNCEMENTTYPE
 import com.anshu.collegemate.Data.Model.Announcement.AnnouncementCard
 import com.anshu.collegemate.Utils.DateTimeUtil
 import com.anshu.collegemate.ui.ViewModel.UserViewModel
 import com.anshu.collegemate.ui.theme.CardColorsScheme
-import androidx.compose.runtime.collectAsState
-import com.anshu.collegemate.Data.Model.Announcement.ANNOUNCEMENTTYPE
 
 
 @Composable

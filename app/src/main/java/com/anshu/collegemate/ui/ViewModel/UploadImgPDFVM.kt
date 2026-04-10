@@ -1,26 +1,15 @@
 package com.anshu.collegemate.ui.ViewModel
 
-import android.R
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.util.Logger
 import com.anshu.collegemate.Data.Injections.FireStorageInjection
 import com.anshu.collegemate.Data.Model.AssignmentTest.UploadResult
 import com.anshu.collegemate.ui.View.Others.CustomizedButtons.activeSource
-import com.anshu.collegemate.ui.View.Screens.LoginScreen
-import com.google.android.gms.common.data.BitmapTeleporter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.serialization.Contextual
 import java.io.File
 import java.io.FileOutputStream
 

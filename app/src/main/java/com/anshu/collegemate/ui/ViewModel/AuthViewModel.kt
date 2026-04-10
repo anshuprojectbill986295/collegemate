@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anshu.collegemate.Data.Model.Login.AuthResult
 import com.anshu.collegemate.Data.Repository.AuthRepository
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import com.google.firebase.messaging.FirebaseMessaging
-import android.util.Log
+
 class AuthViewModel(val repository: AuthRepository= AuthRepository()): ViewModel() {
     private val _authState = MutableStateFlow<AuthResult>(AuthResult.Idle)
     val authState:StateFlow<AuthResult?> = _authState

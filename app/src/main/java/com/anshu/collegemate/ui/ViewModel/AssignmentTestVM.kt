@@ -3,8 +3,6 @@ package com.anshu.collegemate.ui.ViewModel
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.LongState
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anshu.collegemate.Data.Model.AssignmentTest.AssignmentCard
@@ -12,8 +10,6 @@ import com.anshu.collegemate.Data.Model.AssignmentTest.TestCard
 import com.anshu.collegemate.Data.Model.AssignmentTest.TimelineItem
 import com.anshu.collegemate.Data.Repository.AssignmentTestRepository
 import com.anshu.collegemate.Utils.DateTimeUtil
-import com.google.firebase.auth.MultiFactorAssertion
-import com.google.type.Date
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +17,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlin.collections.map
 
 class AssignmentTestVM(
     private val assignmentTestRepository: AssignmentTestRepository = AssignmentTestRepository()): ViewModel() {

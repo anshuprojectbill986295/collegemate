@@ -1,20 +1,13 @@
 package com.anshu.collegemate.ui.ViewModel
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.anshu.collegemate.Data.Model.Announcement.AnnouncementCard
-import com.anshu.collegemate.Data.Model.HomeScreen.RoutineSeed
-import com.anshu.collegemate.Data.Model.HomeScreen.ScheduleCardData
 import com.anshu.collegemate.Data.Repository.AnnouncementRepository
-import com.anshu.collegemate.Utils.DateTimeUtil
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlin.collections.emptyList
 
 class AnnouncementViewModel(
     private val repository: AnnouncementRepository = AnnouncementRepository()): ViewModel() {

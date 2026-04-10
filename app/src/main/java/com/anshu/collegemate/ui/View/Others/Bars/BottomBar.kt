@@ -1,16 +1,18 @@
 package com.anshu.collegemate.ui.View.Others.Bars
 
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BottomAppBar
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -21,64 +23,75 @@ import com.anshu.collegemate.R
 
 @Composable
 fun BottomBar(screen: MutableState<Screens>, navController: NavHostController) {
-
-
-    Surface(shape = RoundedCornerShape(topEnd = 20.dp, topStart = 20.dp), modifier = Modifier.height(60.dp)
-        , color = Color.White
+    // Removed the shape parameter so it defaults to a flat rectangle
+    Surface(
+        color = Color.White,
+        modifier = Modifier.fillMaxWidth()
     ) {
-        BottomAppBar(containerColor = Color.White, modifier = Modifier.fillMaxHeight().padding(top = 9.dp)) {
-            NavigationBarItem(selected = false, onClick = {screen.value= Screens.HomeScreen
-                navController.navigate(screen.value.route)}, icon = {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding() // Moved inside! Pushes the icons up, but leaves white background behind system buttons
+                .height(52.dp),          // Reduced from 60.dp for a slimmer look
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            NavigationBarItem(
+                selected = screen.value.route == Screens.HomeScreen.route,
+                onClick = {
+                    screen.value = Screens.HomeScreen
+                    navController.navigate(screen.value.route)
+                },
+                icon = {
+                    Icon(
+                        painter = painterResource(
+                            if (screen.value.route == Screens.HomeScreen.route) R.drawable.filled_home
+                            else R.drawable.outline_home_24
+                        ),
+                        contentDescription = "Home",
+                        tint = Color.Black
+                    )
+                },
+                colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent)
+            )
 
-                Icon(
-                    painter = painterResource(if(screen.value.route== Screens.HomeScreen.route){
-                        R.drawable.filled_home
-                    }
-                    else{
-                        R.drawable.outline_home_24
-                    }),
+            NavigationBarItem(
+                selected = screen.value.route == Screens.AssignmentTestScreen.route,
+                onClick = {
+                    screen.value = Screens.AssignmentTestScreen
+                    navController.navigate(screen.value.route)
+                },
+                icon = {
+                    Icon(
+                        painter = painterResource(
+                            if (screen.value.route == Screens.AssignmentTestScreen.route) R.drawable.filled_assignment_24px
+                            else R.drawable.outline_assignment_24
+                        ),
+                        contentDescription = "Assignments",
+                        tint = Color.Black
+                    )
+                },
+                colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent)
+            )
 
-                    contentDescription = null, tint = Color.Black
-                )
-            }, colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent))
-            NavigationBarItem(selected = false, onClick = {screen.value= Screens.AssignmentTestScreen
-                navController.navigate(screen.value.route)}, icon = {
-
-                Icon(
-                    painter = painterResource(if(screen.value.route== Screens.AssignmentTestScreen.route){
-                        R.drawable.filled_assignment_24px
-                    }
-                    else{
-                        R.drawable.outline_assignment_24
-                    }),
-
-                    contentDescription = null, tint = Color.Black
-                )
-            }, colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent))
-            NavigationBarItem(selected = false, onClick = {screen.value= Screens.NotificationHistoryScreen
-                navController.navigate(screen.value.route)}, icon = {
-
-                Icon(
-                    painter = painterResource(if(screen.value.route== Screens.NotificationHistoryScreen.route){
-                        R.drawable.filled_notifications_24px
-                    }
-                    else{
-                        R.drawable.outline_notifications_24
-                    }),
-
-                    contentDescription = null, tint = Color.Black
-                )
-            }, colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent))
+            NavigationBarItem(
+                selected = screen.value.route == Screens.NotificationHistoryScreen.route,
+                onClick = {
+                    screen.value = Screens.NotificationHistoryScreen
+                    navController.navigate(screen.value.route)
+                },
+                icon = {
+                    Icon(
+                        painter = painterResource(
+                            if (screen.value.route == Screens.NotificationHistoryScreen.route) R.drawable.filled_notifications_24px
+                            else R.drawable.outline_notifications_24
+                        ),
+                        contentDescription = "Notifications",
+                        tint = Color.Black
+                    )
+                },
+                colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent)
+            )
         }
     }
 }
-
-
-
-//@SuppressLint("UnrememberedMutableState")
-//@Preview(showBackground = true)
-//@Composable
-//fun BottomBarPreview(){
-//    val screen = mutableStateOf<Screens>(Screens.HomeScreen)
-//    BottomBar(screen)
-//}
