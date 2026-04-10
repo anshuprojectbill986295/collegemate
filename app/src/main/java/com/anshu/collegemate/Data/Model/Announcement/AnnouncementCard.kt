@@ -17,19 +17,15 @@ enum class ANNOUNCEMENTTYPE{
 data class AnnouncementCard(
     val id: String="",
     val type:ANNOUNCEMENTTYPE = ANNOUNCEMENTTYPE.NONE,
-
     val message:String="",
-
     val announcerName:String="",
+    val announcerProfileUrl: String="", // <-- Add this new property
     val createdAt:Long=0L,
     val colorKey: String = Miscealleneous.getColorForAnnouncement(type),
-    //cancel related...
     val cancelDate:String="",
     val day: String?=null,
     val subjectCode:String?=null,
     val classStartTime:String="",
-
-
-    val expiryDate: java.util.Date? = null // Add this for TTL
+    val expiryDate: java.util.Date? = null
 )
 

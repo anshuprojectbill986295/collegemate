@@ -107,7 +107,7 @@ fun LoginScreen(
                 )
             )
             .systemBarsPadding() // Pushes content inside the safe area
-            .padding(top = 25.dp, bottom = 20.dp)
+            .padding(bottom = 20.dp)
             .fillMaxSize()
     ) {
         Column(

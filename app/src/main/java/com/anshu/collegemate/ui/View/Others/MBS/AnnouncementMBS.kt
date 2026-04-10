@@ -105,13 +105,17 @@ fun AnnouncementMBS(viewModel: AnnouncementViewModel, onDismiss:()->Unit){
             when(currentStepForGeneral){
                 StepsForGeneral.DETAILS ->{
                     GeneralDetails(textGeneral,type, onTextFieldValueChange = {textGeneral = it}
-                    , onNextClicked = {currentStepForGeneral = StepsForGeneral.REVIEW})
+                        , onNextClicked = {currentStepForGeneral = StepsForGeneral.REVIEW})
                 }
                 StepsForGeneral.REVIEW->{
                     GeneralReview(type,textGeneral, onConfirmClicked = {
                         val a = AnnouncementCard(
-                            "", ANNOUNCEMENTTYPE.GENERAL, textGeneral, UserViewModel.userP.value!!.name,
-                            System.currentTimeMillis()
+                            id = "",
+                            type = ANNOUNCEMENTTYPE.GENERAL,
+                            message = textGeneral,
+                            announcerName = UserViewModel.userP.value!!.name,
+                            announcerProfileUrl = UserViewModel.userP.value?.photoURL ?: "", // ADDED HERE
+                            createdAt = System.currentTimeMillis()
                         )
                         scope.launch {
                             viewModel.saveAnnouncement(a)
@@ -132,7 +136,7 @@ fun AnnouncementMBS(viewModel: AnnouncementViewModel, onDismiss:()->Unit){
                 StepsForCancellation.CHOOSE_DATE -> {
                     DateSelection(cancellationDate, onNextClicked = {currentStepForCancellation=
                         StepsForCancellation.CHOOSE_SUBJECT}, onCalendarClicked = {
-                            showDatePicker = true
+                        showDatePicker = true
                     })
                 }
                 StepsForCancellation.CHOOSE_SUBJECT -> {
@@ -149,9 +153,10 @@ fun AnnouncementMBS(viewModel: AnnouncementViewModel, onDismiss:()->Unit){
                             canceledClass.name
                         )
                         val announcementCard = AnnouncementCard(
-                            type = ANNOUNCEMENTTYPE.CANCELLATION, message = message,
-
+                            type = ANNOUNCEMENTTYPE.CANCELLATION,
+                            message = message,
                             announcerName = UserViewModel.userP.value!!.name,
+                            announcerProfileUrl = UserViewModel.userP.value?.photoURL ?: "", // ADDED HERE
                             createdAt = System.currentTimeMillis(),
 
                             //cancel related...
@@ -194,7 +199,6 @@ fun AnnouncementMBS(viewModel: AnnouncementViewModel, onDismiss:()->Unit){
         }
     }
 }
-// For GENERAL
 // For GENERAL
 @Composable
 fun GeneralDetails(
