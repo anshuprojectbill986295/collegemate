@@ -21,7 +21,6 @@ import com.anshu.collegemate.ui.ViewModel.AnnouncementViewModel
 fun NotificationHistoryScreen(viewModel: AnnouncementViewModel = viewModel()) {
 
     val list by viewModel.announcements.collectAsState()
-    //val classCancelledList by viewModel.classCancelledOnDate.collectAsState()
     Log.d("listLength",list.size.toString())
     val gradient = Brush.linearGradient(colors = listOf(Color(0xfff0f4f8)
         ,Color(0xffe0e7ff)), start = Offset(0f,0f),end= Offset(100f,100f))
