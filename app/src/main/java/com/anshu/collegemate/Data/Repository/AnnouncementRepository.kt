@@ -5,6 +5,9 @@ import com.anshu.collegemate.Data.Injections.FireStoreInjection
 import com.anshu.collegemate.Data.Model.Announcement.ANNOUNCEMENTTYPE
 import com.anshu.collegemate.Data.Model.Announcement.AnnouncementCard
 import com.google.firebase.firestore.Source
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 
@@ -15,6 +18,7 @@ class AnnouncementRepository {
         val calendar = java.util.Calendar.getInstance()
         calendar.add(java.util.Calendar.DAY_OF_YEAR, 7)
         val sevenDaysFromNow = calendar.time
+
 
         val announcementWithExpiry = a.copy(expiryDate = sevenDaysFromNow)
 
@@ -84,6 +88,40 @@ class AnnouncementRepository {
             }
 
 
+    }
+
+    fun getGeneralAnnouncementsFlow(): Flow<List<AnnouncementCard>> = callbackFlow {
+        val listenerRegistration = firestore.collection("Announcement")
+            .document(ANNOUNCEMENTTYPE.GENERAL.toString())
+            .collection("items")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.e("AnnouncementRepository", "Error listening to general announcements", error)
+                    return@addSnapshotListener
+                }
+                val list = snapshot?.documents?.mapNotNull { it.toObject(AnnouncementCard::class.java) } ?: emptyList()
+                trySend(list)
+            }
+        awaitClose {
+            listenerRegistration.remove()
+        }
+    }
+
+    fun getCancellationAnnouncementsFlow(): Flow<List<AnnouncementCard>> = callbackFlow {
+        val listenerRegistration = firestore.collection("Announcement")
+            .document(ANNOUNCEMENTTYPE.CANCELLATION.toString())
+            .collection("items")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.e("AnnouncementRepository", "Error listening to cancellation announcements", error)
+                    return@addSnapshotListener
+                }
+                val list = snapshot?.documents?.mapNotNull { it.toObject(AnnouncementCard::class.java) } ?: emptyList()
+                trySend(list)
+            }
+        awaitClose {
+            listenerRegistration.remove()
+        }
     }
 
 }

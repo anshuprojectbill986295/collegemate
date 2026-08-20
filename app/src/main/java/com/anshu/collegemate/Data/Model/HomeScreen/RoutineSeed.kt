@@ -3,247 +3,246 @@ package com.anshu.collegemate.Data.Model.HomeScreen
 object RoutineSeed {
     val mondayClasses = listOf(
         ScheduleCardData(
-            "CS-2201",
-            "Software Engineering",
-            "Dr. Achyuth Sarkar",
-            "CS BLock-22",
+            "MH-3101",
+            "Engineering Economics",
+            "Dr.Ahmed Mazumder",
+            "CSE Block",
             "10:00",
             "11:00",
-            "BLUETHEME",
-            "https://drive.google.com/file/d/1Jaq4txT49E9qTSg2x_GccNZwrTaBoIfM/view?usp=drive_link"
-        ),
-        ScheduleCardData(
-            "BS-2201",
-            "Optimization Techniques",
-            "Dr. Susanta Maity",
-            "CS BLock-22",
-            "11:00",
-            "12:00",
             "YELLOWTHEME",
-            "https://drive.google.com/file/d/18ijtyUCQFyTFD4W4CCqLRd28-eLlLukJ/view?usp=drive_link"
+            "https://drive.google.com/file/d/1o4O1vG6ImFEaR02GzHfbU3Foh7WgJzYC/view?usp=drive_link"
         ),
         ScheduleCardData(
-            "CS-220A",
-            "Computer Organization & Architecture",
-            "Dr. Achyuth Sarkar",
-            "CS BLock-22",
+            "CS-3103",
+            "Python for Data Science",
+            "Dr. Bir Arun",
+            "Central Library-22",
             "12:00",
             "13:00",
-            "GREENTHEME",
-            "https://drive.google.com/file/d/1yg_31tlbIwgW3bsTSS9GarTA6Of7IQqU/view?usp=drive_link"
+            "BLUETHEME",
+            "https://drive.google.com/file/d/1pLd4f8Xvd9hz8qp1BpFdQMPT8ewSr8uz/view?usp=drive_link"
         ),
         ScheduleCardData(
-            "MH-2201",
-            "Entrepreneur Essential & Early Stage Start-up",
-            "Dr.Ahmed Majumder",
-            "Electrical Block-21",
-            "14:00",
-            "15:00",
-            "ORANGETHEME",
-            "https://drive.google.com/file/d/1CagMq7DaR8otrdlZqB1CKpnG6WMD-J-l/view?usp=drive_link"
-        ),
-        ScheduleCardData(
-            "CS-2203",
-            "COA Laboratory",
-            "Dr. Achyuth Sarkar",
-            "Networking Lab(2nd Floor)",
+            "CS-3105",
+            "Minor Project-I",
+            "",
+            "",
             "15:00",
             "17:00",
             "PURPLETHEME",
-            "https://drive.google.com/file/d/1Q1gmrFu1bx2B8diM5eS5Z7FUHOwTCc0P/view?usp=drive_link"
-
+            "https://drive.google.com/file/d/1HCah_VHIn_wSUav1pThMuqOPCLR9Kn0x/view?usp=sharing"
         )
     )
 
     val tuesdayClasses = listOf(
         ScheduleCardData(
-            "CS-2201",
-            "Software Engineering",
-            "Dr. Achyuth Sarkar",
-            "CS BLock-22",
+            "CS-3102",
+            "Operating System",
+            "Dr. Swarnendu Kr. Chakraborty",
+            "Central Library-22",
             "10:00",
             "11:00",
-            "BLUETHEME",
-            "https://drive.google.com/file/d/1Jaq4txT49E9qTSg2x_GccNZwrTaBoIfM/view?usp=drive_link"
+            "REDTHEME",
+            "https://drive.google.com/file/d/1EU28I3XwNTDkWxmpJbp4hj0_YLF3Y6MJ/view?usp=drive_link"
         ),
         ScheduleCardData(
-            "CS-2202",
-            "Formal Language and Automata Theory",
-            "Dr. Rajat Subhra Goswami",
-            "CS BLock-22",
+            "CS-310A",
+            "Compiler Design",
+            "Dr. Koj Sambyo",
+            "Central Library-22",
             "11:00",
             "12:00",
-            "REDTHEME",
-            "https://drive.google.com/file/d/1cwCescTpANqGSgq9BMiznjJ3QRJ1O_aq/view?usp=drive_link"
+            "GREENTHEME",
+            "https://drive.google.com/file/d/1t0taQjyZ0QCyiH1a0i9sCJaMCtwlTYCu/view?usp=drive_link"
         ),
         ScheduleCardData(
-            "CS-220A",
-            "Computer Organization & Architecture",
-            "Dr. Achyuth Sarkar",
-            "CS BLock-22",
+            "CS-3103",
+            "Python for Data Science",
+            "Dr. Bir Arun",
+            "Central Library-22",
             "12:00",
             "13:00",
-            "GREENTHEME",
-            "https://drive.google.com/file/d/1yg_31tlbIwgW3bsTSS9GarTA6Of7IQqU/view?usp=drive_link"
+            "BLUETHEME",
+            "https://drive.google.com/file/d/1pLd4f8Xvd9hz8qp1BpFdQMPT8ewSr8uz/view?usp=drive_link"
         ),
         ScheduleCardData(
-            "YY-220X",
-            "Open Elective(IPR)",
-            "Dr.Ahmed Majumder",
-            "Electrical Block-21",
+            "OE-3",
+            "Open Elective",
+            "",
+            "",
             "14:00",
             "15:00",
             "TEALTHEME",
-            "https://drive.google.com/file/d/1BcFElwOW0NeVZyoQgHbmwztiCdTTvb1p/view?usp=sharing"
+            ""
+        ),
+        ScheduleCardData(
+            "CS-3106",
+            "System Software and Administration Laboratory",
+            "Guest Lecturer",
+            "CSE Block Ground Floor",
+            "15:00",
+            "17:00",
+            "ORANGETHEME",
+            "https://drive.google.com/file/d/1ERQ4dvL-q1UK_8S9MiW1CWpuNeR-3XCt/view?usp=drive_link"
         )
     )
 
     val wednesdayClasses = listOf(
         ScheduleCardData(
-            "CS-2201",
-            "Software Engineering",
-            "Dr. Achyuth Sarkar",
-            "CS BLock-22",
+            "CS-3102",
+            "Operating System",
+            "Dr. Swarnendu Kr. Chakraborty",
+            "Central Library-22",
             "10:00",
             "11:00",
-            "BLUETHEME",
-            "https://drive.google.com/file/d/1Jaq4txT49E9qTSg2x_GccNZwrTaBoIfM/view?usp=drive_link"
+            "REDTHEME",
+            "https://drive.google.com/file/d/1EU28I3XwNTDkWxmpJbp4hj0_YLF3Y6MJ/view?usp=drive_link"
         ),
         ScheduleCardData(
-            "CS-2202",
-            "Formal Language and Automata Theory",
-            "Dr. Rajat Subhra Goswami",
-            "CS BLock-22",
+            "MH-3101",
+            "Engineering Economics",
+            "Dr.Ahmed Mazumder",
+            "CSE Block",
             "11:00",
             "12:00",
-            "REDTHEME",
-            "https://drive.google.com/file/d/1cwCescTpANqGSgq9BMiznjJ3QRJ1O_aq/view?usp=drive_link"
+            "YELLOWTHEME",
+            "https://drive.google.com/file/d/1o4O1vG6ImFEaR02GzHfbU3Foh7WgJzYC/view?usp=drive_link"
         ),
         ScheduleCardData(
-            "MH-2201",
-            "Entrepreneur Essential & Early Stage Start-up",
-            "Dr.Ahmed Majumder",
-            "Electrical Block-21",
+            "CS-3101",
+            "System Software and Administration",
+            "Guest Lecturer-2",
+            "Central Library-22",
             "12:00",
             "13:00",
             "ORANGETHEME",
-            "https://drive.google.com/file/d/1CagMq7DaR8otrdlZqB1CKpnG6WMD-J-l/view?usp=drive_link"
+            "https://drive.google.com/file/d/1zy_OSnpON9LyifzJnsv3w70Bv9c8nH37/view?usp=drive_link"
         ),
         ScheduleCardData(
-            "CS-2205",
-            "FLAT Laboratory",
-            "Dr. Rajat Subhra Goswami",
-            "Networking Lab(2nd Floor)",
+            "OE-3",
+            "Open Elective",
+            "",
+            "",
+            "14:00",
+            "15:00",
+            "TEALTHEME",
+            ""
+        ),
+        ScheduleCardData(
+            "CS-3107",
+            "Operating System Laboratory",
+            "Dr. Swarnendu Kr. Chakraborty",
+            "CSE Block Ground Floor",
             "15:00",
             "17:00",
             "PURPLETHEME",
-            "https://drive.google.com/file/d/1D5C1Dk4FrL_w5eNTyrZPcs_Vt2rzRVJW/view?usp=drive_link"
+            "https://drive.google.com/file/d/1lbxG4qgpXdG4HaIIhBPYcHSr6QnKZa_b/view?usp=drive_link"
         )
     )
 
     val thursdayClasses = listOf(
         ScheduleCardData(
-            "CS-2202",
-            "Formal Language and Automata Theory",
-            "Dr. Rajat Subhra Goswami",
-            "CS BLock-22",
+            "CS-3102",
+            "Operating System",
+            "Dr. Swarnendu Kr. Chakraborty",
+            "Central Library-22",
             "10:00",
             "11:00",
             "REDTHEME",
-            "https://drive.google.com/file/d/1cwCescTpANqGSgq9BMiznjJ3QRJ1O_aq/view?usp=drive_link"
+            "https://drive.google.com/file/d/1EU28I3XwNTDkWxmpJbp4hj0_YLF3Y6MJ/view?usp=drive_link"
         ),
         ScheduleCardData(
-            "BS-2201",
-            "Optimization Techniques",
-            "Dr. Susanta Maity",
-            "CS BLock-22",
+            "CS-310A",
+            "Compiler Design",
+            "Dr. Koj Sambyo",
+            "Central Library-22",
             "11:00",
             "12:00",
-            "YELLOWTHEME",
-            "https://drive.google.com/file/d/18ijtyUCQFyTFD4W4CCqLRd28-eLlLukJ/view?usp=drive_link"
+            "GREENTHEME",
+            "https://drive.google.com/file/d/1t0taQjyZ0QCyiH1a0i9sCJaMCtwlTYCu/view?usp=drive_link"
         ),
         ScheduleCardData(
-            "CS-220A",
-            "Computer Organization & Architecture",
-            "Dr. Achyuth Sarkar",
-            "CS BLock-22",
+            "CS-3101",
+            "System Software and Administration",
+            "Guest Lecturer-2",
+            "Central Library-22",
             "12:00",
             "13:00",
-            "GREENTHEME",
-            "https://drive.google.com/file/d/1yg_31tlbIwgW3bsTSS9GarTA6Of7IQqU/view?usp=drive_link"
+            "ORANGETHEME",
+            "https://drive.google.com/file/d/1zy_OSnpON9LyifzJnsv3w70Bv9c8nH37/view?usp=drive_link"
         ),
         ScheduleCardData(
-            "YY-220X",
-            "Open Elective(IPR)",
-            "Dr.Ahmed Majumder",
-            "Electrical Block-21",
+            "OE-3",
+            "Open Elective",
+            "",
+            "",
             "14:00",
             "15:00",
             "TEALTHEME",
-            "https://drive.google.com/file/d/1BcFElwOW0NeVZyoQgHbmwztiCdTTvb1p/view?usp=sharing"
+            ""
         ),
         ScheduleCardData(
-            "CS-2204",
-            "Software Engineering Laboratory",
-            "Dr. Achyuth Sarkar",
-            "AI/ML Lab(Ground Floor)",
+            "CS-3108",
+            "Compiler Design Laboratory",
+            "Dr. Koj Sambyo",
+            "CSE Block Ground Floor",
             "15:00",
             "17:00",
             "PURPLETHEME",
-            "https://drive.google.com/file/d/1EZ-D6DQ02-jF4Ji_8dZUHPpFK-X7MLqi/view?usp=drive_link"
+            "https://drive.google.com/file/d/1POl43xgxS2L2G8fyKRm1HiGF8kLzAB2l/view?usp=drive_link"
         )
     )
 
     val fridayClasses = listOf(
         ScheduleCardData(
-            "MH-2201",
-            "Entrepreneur Essential & Early Stage Start-up",
-            "Dr.Ahmed Majumder",
-            "Electrical Block-21",
+            "MH-3101",
+            "Engineering Economics",
+            "Dr.Ahmed Mazumder",
+            "CSE Block",
+            "09:00",
+            "10:00",
+            "YELLOWTHEME",
+            "https://drive.google.com/file/d/1o4O1vG6ImFEaR02GzHfbU3Foh7WgJzYC/view?usp=drive_link"
+        ),
+        ScheduleCardData(
+            "CS-3103",
+            "Python for Data Science",
+            "Dr. Bir Arun",
+            "Central Library-22",
             "10:00",
             "11:00",
-            "ORANGETHEME",
-            "https://drive.google.com/file/d/1CagMq7DaR8otrdlZqB1CKpnG6WMD-J-l/view?usp=drive_link"
+            "BLUETHEME",
+            "https://drive.google.com/file/d/1pLd4f8Xvd9hz8qp1BpFdQMPT8ewSr8uz/view?usp=drive_link"
         ),
         ScheduleCardData(
-            "BS-2201",
-            "Optimization Techniques",
-            "Dr. Susanta Maity",
-            "CS BLock-22",
+            "CS-310A",
+            "Compiler Design",
+            "Dr. Koj Sambyo",
+            "Central Library-22",
             "11:00",
             "12:00",
-            "YELLOWTHEME",
-            "https://drive.google.com/file/d/18ijtyUCQFyTFD4W4CCqLRd28-eLlLukJ/view?usp=drive_link"
-        ),
-//        ScheduleCardData(
-//            "MH-2201",
-//            "Entrepreneur Essential & Early Stage Start-up",
-//            "In routine But in reality class is not held.",
-//            "N/A",
-//            "12:00",
-//            "13:00",
-//            "ORANGETHEME",
-//            "https://drive.google.com/file/d/1CagMq7DaR8otrdlZqB1CKpnG6WMD-J-l/view?usp=drive_link"
-//        ),
-        //The above class In routine aBut in reality class is not held. Therefore class is not displayed
-        ScheduleCardData(
-            "YY-220X",
-            "Open Elective(IPR)",
-            "Dr.Ahmed Majumder",
-            "Electrical Block-21",
-            "14:00",
-            "15:00",
-            "TEALTHEME",
-            "https://drive.google.com/file/d/1BcFElwOW0NeVZyoQgHbmwztiCdTTvb1p/view?usp=sharing"
+            "GREENTHEME",
+            "https://drive.google.com/file/d/1t0taQjyZ0QCyiH1a0i9sCJaMCtwlTYCu/view?usp=drive_link"
         ),
         ScheduleCardData(
-            "CS-2206",
-            "Advanced Programming & Virtualization",
-            "Dr. Rajat Subhra Goswami",
-            "Networking Lab(2nd Floor)",
+            "CS-3101",
+            "System Software and Administration",
+            "Guest Lecturer-2",
+            "Central Library-22",
+            "12:00",
+            "13:00",
+            "ORANGETHEME",
+            "https://drive.google.com/file/d/1zy_OSnpON9LyifzJnsv3w70Bv9c8nH37/view?usp=drive_link"
+        ),
+        ScheduleCardData(
+            "SKILL-DEV",
+            "Skill Development",
+            "",
+            "",
             "15:00",
             "17:00",
-            "PURPLETHEME"
+            "TEALTHEME",
+            "https://drive.google.com/file/d/1HCah_VHIn_wSUav1pThMuqOPCLR9Kn0x/view?usp=sharing"
         )
     )
 
@@ -254,8 +253,18 @@ object RoutineSeed {
         "thursday" to thursdayClasses,
         "friday" to fridayClasses
     )
+
     val setOfDistinctClasses = listOf(
-        mondayClasses[0], mondayClasses[1], mondayClasses[2],
-        mondayClasses[3], tuesdayClasses[1], tuesdayClasses[3],
-        mondayClasses.last(),wednesdayClasses.last(),thursdayClasses.last(),fridayClasses.last())
+        wednesdayClasses[2], // CS-3101
+        tuesdayClasses[0],   // CS-3102
+        mondayClasses[1],    // CS-3103
+        tuesdayClasses[1],   // CS-310A
+        tuesdayClasses[3],   // OE-3
+        mondayClasses[2],    // CS-3105
+        tuesdayClasses[4],   // CS-3106
+        wednesdayClasses[4], // CS-3107
+        thursdayClasses[4],  // CS-3108
+        fridayClasses[4],    // SKILL-DEV
+        mondayClasses[0]     // MH-3101
+    )
 }

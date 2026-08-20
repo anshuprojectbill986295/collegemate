@@ -20,9 +20,20 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         android.util.Log.e("FCM_TEST", "onMessageReceived CALLED")
         super.onMessageReceived(message)
 
-        val title = message.data["title"] ?: "New Announcement"
-        val body = message.data["body"] ?: ""
         val type = message.data["type"] ?: "NONE"
+        var title = message.data["title"] ?: "New Announcement"
+        var body = message.data["body"] ?: ""
+
+        if (type == "CANCELLATION") {
+            val subjectName = message.data["subjectName"]
+            val startTime = message.data["classStartTime"]
+            val endTime = message.data["classEndTime"]
+
+            if (!subjectName.isNullOrEmpty() && !startTime.isNullOrEmpty() && !endTime.isNullOrEmpty()) {
+                title = "🔔 Class Cancelled"
+                body = "$subjectName\n${DateTimeUtil.formatTimeRange(startTime, endTime)}"
+            }
+        }
 
         // 🔹 FIX 1: ALWAYS use your App Logo for the small icon!
         // Make sure you have a monochrome/transparent version of your logo in your drawables.

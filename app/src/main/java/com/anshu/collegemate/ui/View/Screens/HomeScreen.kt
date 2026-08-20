@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -46,9 +47,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.anshu.collegemate.Data.Model.HomeScreen.RoutineSeed
+import com.anshu.collegemate.Data.Model.HomeScreen.RoutineResolver
 import com.anshu.collegemate.Utils.DateTimeUtil
 import com.anshu.collegemate.Utils.DateTimeUtil.todayDay
+import com.anshu.collegemate.ui.View.Others.BirthdayBanner
 import com.anshu.collegemate.ui.View.Others.DataCardView.CancelledScheduleCardView
 import com.anshu.collegemate.ui.View.Others.DataCardView.ScheduleCardView
 import com.anshu.collegemate.ui.View.Others.Permission.NotificationPermission
@@ -69,7 +71,8 @@ fun HomeScreen(viewModel: AnnouncementViewModel = viewModel()){
     var dateChosenInLong by remember { mutableStateOf(System.currentTimeMillis()) }
     val dateChosenInString = DateTimeUtil.getDateFromLong(dateChosenInLong)
     val dayChosen = DateTimeUtil.getDayFromLong(dateChosenInLong)
-    val todayRoutine = RoutineSeed.weeklyRoutine[dayChosen]?:emptyList()
+    val userEmail = UserViewModel.userP.value?.email ?: ""
+    val todayRoutine = RoutineResolver.resolveDayRoutine(dayChosen, userEmail)
     var showDatePicker by remember{(mutableStateOf(false))}
     var dateChosenInCalender by remember { mutableStateOf(0L) }
 
@@ -78,7 +81,6 @@ fun HomeScreen(viewModel: AnnouncementViewModel = viewModel()){
     val datePickerState = rememberDatePickerState()
     var selectedButton by remember { mutableStateOf(0) }
     val classCancelledList by viewModel.classCancelledOnDate.collectAsState()
-    val isOffline by viewModel.isOffline.collectAsState() // NEW STATE
 
 
     LaunchedEffect(dateChosenInString) {
@@ -122,6 +124,7 @@ Log.e("today",dayChosen+dateChosenInString)
                     ), fontWeight = FontWeight(800), fontSize = 15.sp
                 )
             }
+            BirthdayBanner(userEmail)
             Box( modifier = Modifier.fillMaxWidth().background(
                 Color.Transparent)) {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
@@ -153,53 +156,6 @@ Log.e("today",dayChosen+dateChosenInString)
 
                 }
             }
-            // --- NEW: OFFLINE CAUTION BANNER AND STATUS FLAG ---
-            if (isOffline) {
-                // Warning Banner
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 10.dp, vertical = 5.dp),
-                    colors = androidx.compose.material3.CardDefaults.cardColors(
-                        containerColor = Color(0xFFFFF3CD) // Light yellow caution color
-                    )
-                ) {
-                    Row(
-                        modifier = Modifier.padding(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Warning,
-                            contentDescription = "Offline Warning",
-                            tint = Color(0xFF856404) // Dark yellowish brown
-                        )
-                        Text(
-                            text = " Not connected to internet. Showing standard scheduled routine only.",
-                            color = Color(0xFF856404),
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.padding(start = 4.dp)
-                        )
-                    }
-                }
-                // Status Flag
-                Text(
-                    text = "🔴 Offline Mode",
-                    modifier = Modifier.padding(start = 15.dp, bottom = 5.dp),
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Red
-                )
-            } else {
-                // Status Flag
-                Text(
-                    text = "🟢 Real-time Schedule",
-                    modifier = Modifier.padding(start = 15.dp, bottom = 5.dp, top = 5.dp),
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF10B981) // Emerald Green
-                )
-            }
             // ----------------------------------------------------
             Log.d("CancelledList","${classCancelledList.size}")
             if (todayRoutine.isEmpty()) {
@@ -221,7 +177,7 @@ Log.e("today",dayChosen+dateChosenInString)
                     )
                 }
             }
-            else if(classCancelledList.isNotEmpty()&& !isOffline){
+            else if(classCancelledList.isNotEmpty()){
 
                 //it is working well
                 if (classCancelledList.size == todayRoutine.size){
@@ -247,7 +203,7 @@ Log.e("today",dayChosen+dateChosenInString)
 
                     LazyColumn(Modifier.fillMaxSize()) {
                         items(todayRoutine){period->
-                          val isThisPeriodCancelled = classCancelledList.any{it.classStartTime== period.startTime}
+                          val isThisPeriodCancelled = classCancelledList.any{it.subjectCode == period.subjectCode && it.classStartTime== period.startTime}
 
                             if (isThisPeriodCancelled){
                                 CancelledScheduleCardView(period)

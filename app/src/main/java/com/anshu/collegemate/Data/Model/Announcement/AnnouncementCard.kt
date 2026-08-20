@@ -25,7 +25,9 @@ data class AnnouncementCard(
     val cancelDate:String="",
     val day: String?=null,
     val subjectCode:String?=null,
+    val subjectName:String="",
     val classStartTime:String="",
+    val classEndTime:String="",
     val expiryDate: java.util.Date? = null
 )
 

@@ -74,6 +74,20 @@ object DateTimeUtil {
     ): String {
         return "Your $subject class scheduled on $day, $date is cancelled."
     }
+
+    fun convertConcise(time24: String): String {
+        val inputFormatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val date = inputFormatter.parse(time24) ?: return time24
+        val hasMinutes = time24.split(":")[1] != "00"
+        val pattern = if (hasMinutes) "h:mm a" else "h a"
+        val outputFormatter = SimpleDateFormat(pattern, Locale.getDefault())
+        return outputFormatter.format(date).uppercase()
+    }
+
+    fun formatTimeRange(start24: String, end24: String): String {
+        return "${convertConcise(start24)} – ${convertConcise(end24)}"
+    }
+
     ////////////
     fun getTimeAgo(createdAt:Long):String{
         val diff = System.currentTimeMillis()-createdAt

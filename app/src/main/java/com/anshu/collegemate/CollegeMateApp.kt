@@ -14,15 +14,23 @@ class CollegeMateApp : Application() {
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
+            val manager = getSystemService(NotificationManager::class.java)
+
+            val announcementChannel = NotificationChannel(
                 "ANNOUNCEMENT_CHANNEL",
                 "Announcements",
                 NotificationManager.IMPORTANCE_HIGH
             )
-            channel.description = "College announcements"
+            announcementChannel.description = "College announcements"
+            manager.createNotificationChannel(announcementChannel)
 
-            val manager = getSystemService(NotificationManager::class.java)
-            manager.createNotificationChannel(channel)
+            val birthdayChannel = NotificationChannel(
+                "BIRTHDAY_CHANNEL",
+                "Birthdays",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            birthdayChannel.description = "Student birthday greetings"
+            manager.createNotificationChannel(birthdayChannel)
         }
     }
 }

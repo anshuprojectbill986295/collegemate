@@ -17,12 +17,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.getValue
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.anshu.collegemate.Navigation.Screens
 import com.anshu.collegemate.R
 
 @Composable
-fun BottomBar(screen: MutableState<Screens>, navController: NavHostController) {
+fun BottomBar(navController: NavHostController) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
     // Removed the shape parameter so it defaults to a flat rectangle
     Surface(
         color = Color.White,
@@ -37,15 +44,21 @@ fun BottomBar(screen: MutableState<Screens>, navController: NavHostController) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             NavigationBarItem(
-                selected = screen.value.route == Screens.HomeScreen.route,
+                selected = currentDestination?.hierarchy?.any { it.route == Screens.HomeScreen.route } == true,
                 onClick = {
-                    screen.value = Screens.HomeScreen
-                    navController.navigate(screen.value.route)
+                    val route = Screens.HomeScreen.route
+                    if (currentDestination?.route != route) {
+                        navController.navigate(route) {
+                            popUpTo(navController.graph.findStartDestination().id)
+                            launchSingleTop = true
+                        }
+                    }
                 },
                 icon = {
+                    val isSelected = currentDestination?.hierarchy?.any { it.route == Screens.HomeScreen.route } == true
                     Icon(
                         painter = painterResource(
-                            if (screen.value.route == Screens.HomeScreen.route) R.drawable.filled_home
+                            if (isSelected) R.drawable.filled_home
                             else R.drawable.outline_home_24
                         ),
                         contentDescription = "Home",
@@ -56,15 +69,21 @@ fun BottomBar(screen: MutableState<Screens>, navController: NavHostController) {
             )
 
             NavigationBarItem(
-                selected = screen.value.route == Screens.AssignmentTestScreen.route,
+                selected = currentDestination?.hierarchy?.any { it.route == Screens.AssignmentTestScreen.route } == true,
                 onClick = {
-                    screen.value = Screens.AssignmentTestScreen
-                    navController.navigate(screen.value.route)
+                    val route = Screens.AssignmentTestScreen.route
+                    if (currentDestination?.route != route) {
+                        navController.navigate(route) {
+                            popUpTo(navController.graph.findStartDestination().id)
+                            launchSingleTop = true
+                        }
+                    }
                 },
                 icon = {
+                    val isSelected = currentDestination?.hierarchy?.any { it.route == Screens.AssignmentTestScreen.route } == true
                     Icon(
                         painter = painterResource(
-                            if (screen.value.route == Screens.AssignmentTestScreen.route) R.drawable.filled_assignment_24px
+                            if (isSelected) R.drawable.filled_assignment_24px
                             else R.drawable.outline_assignment_24
                         ),
                         contentDescription = "Assignments",
@@ -75,15 +94,21 @@ fun BottomBar(screen: MutableState<Screens>, navController: NavHostController) {
             )
 
             NavigationBarItem(
-                selected = screen.value.route == Screens.NotificationHistoryScreen.route,
+                selected = currentDestination?.hierarchy?.any { it.route == Screens.NotificationHistoryScreen.route } == true,
                 onClick = {
-                    screen.value = Screens.NotificationHistoryScreen
-                    navController.navigate(screen.value.route)
+                    val route = Screens.NotificationHistoryScreen.route
+                    if (currentDestination?.route != route) {
+                        navController.navigate(route) {
+                            popUpTo(navController.graph.findStartDestination().id)
+                            launchSingleTop = true
+                        }
+                    }
                 },
                 icon = {
+                    val isSelected = currentDestination?.hierarchy?.any { it.route == Screens.NotificationHistoryScreen.route } == true
                     Icon(
                         painter = painterResource(
-                            if (screen.value.route == Screens.NotificationHistoryScreen.route) R.drawable.filled_notifications_24px
+                            if (isSelected) R.drawable.filled_notifications_24px
                             else R.drawable.outline_notifications_24
                         ),
                         contentDescription = "Notifications",

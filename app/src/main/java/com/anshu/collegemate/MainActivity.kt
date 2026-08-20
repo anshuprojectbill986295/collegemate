@@ -10,11 +10,14 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.anshu.collegemate.Data.Repository.AuthRepository
+import com.anshu.collegemate.Utils.BirthdayScheduler
 import com.anshu.collegemate.ui.View.Screens.LoginScreen
 import com.anshu.collegemate.ui.ViewModel.AuthViewModel
 import com.anshu.collegemate.ui.ViewModel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
+import android.util.Log
+import android.view.KeyEvent
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -32,6 +35,7 @@ class MainActivity : ComponentActivity() {
         // 🛡️ THE SAFETY NET: Only subscribe if they actually have an active session.
         if (repository.isUserLoggedIn()) {
             FirebaseMessaging.getInstance().subscribeToTopic("all_announcements")
+            BirthdayScheduler.scheduleNextCheck(this)
         } else {
             // Just in case a weird glitch happened, forcefully unsubscribe them if they aren't logged in
             FirebaseMessaging.getInstance().unsubscribeFromTopic("all_announcements")
@@ -50,5 +54,15 @@ class MainActivity : ComponentActivity() {
 
 
         }
+    }
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Log.d(
+                "BACK_TRACE",
+                "Activity.onKeyDown | action=${event.action}"
+            )
+        }
+
+        return super.onKeyDown(keyCode, event)
     }
 }

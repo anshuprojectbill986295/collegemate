@@ -14,8 +14,8 @@ android {
         applicationId = "com.anshu.collegemate"
         minSdk = 24
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.storage)
+    implementation(libs.androidx.work.runtime.ktx)
 
 
     implementation(libs.androidx.core.ktx)

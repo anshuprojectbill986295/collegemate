@@ -6,7 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.anshu.collegemate.Data.Model.Announcement.AnnouncementCard
 import com.anshu.collegemate.Data.Repository.AnnouncementRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class AnnouncementViewModel(
@@ -14,55 +17,55 @@ class AnnouncementViewModel(
 
 
 
-    private val _announcements = MutableStateFlow<List<AnnouncementCard>>(emptyList())
-    val announcements: StateFlow<List<AnnouncementCard>> = _announcements
+    private val _selectedDate = MutableStateFlow("")
 
-    private val _classCancelledOnDate = MutableStateFlow<List<AnnouncementCard>>(emptyList())
-    val classCancelledOnDate: StateFlow<List<AnnouncementCard>> = _classCancelledOnDate
+    private val generalAnnouncementsFlow = repository.getGeneralAnnouncementsFlow()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 
-    private val _isOffline = MutableStateFlow<Boolean>(false)
-    val isOffline: StateFlow<Boolean> = _isOffline
+    private val cancellationAnnouncementsFlow = repository.getCancellationAnnouncementsFlow()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 
-    init{
-        Log.d("init98","EnterGet")
+    val announcements: StateFlow<List<AnnouncementCard>> = combine(
+        generalAnnouncementsFlow,
+        cancellationAnnouncementsFlow
+    ) { general, cancellation ->
+        (general + cancellation).sortedByDescending { it.createdAt }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
 
-        getAnnouncement()
-        Log.d("init98","EnterGet")
-
-    }
+    val classCancelledOnDate: StateFlow<List<AnnouncementCard>> = combine(
+        cancellationAnnouncementsFlow,
+        _selectedDate
+    ) { cancellations, date ->
+        if (date.isEmpty()) emptyList()
+        else cancellations.filter { it.cancelDate == date }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
 
     fun saveAnnouncement(a: AnnouncementCard){
         repository.saveAnnouncementInFireStore(a)
         Log.e("Abhishshek","Abhsioshe'")
-        getAnnouncement()
     }
 //    @RequiresApi(Build.VERSION_CODES.O)
 //    suspend fun fetchTodayCancelAnnouncement(): List<AnnouncementCard>{
 //        return repository.fetchTodayCancelAnnouncement()
 //    }
-    fun getAnnouncement(){
-    Log.d("getAnn1","EnterGet")
-    viewModelScope.launch {
-             val generaList = repository.getGeneralAnnouncement()
-             val cancelList = repository.getCancellationAnnouncement()
-             val combinedList = generaList.plus(cancelList)
-            _announcements.value = combinedList.sortedBy { it.createdAt }.reversed()
-            Log.d("getAnn2",_announcements.value.size.toString())
-        }
-    Log.d("getAnn3",_announcements.value.size.toString())
-}
     fun getClassCancelled(date:String){
-        viewModelScope.launch {
-            try {
-                _classCancelledOnDate.value = repository.getCancellationAnnouncement(date)
-
-                _isOffline.value = false
-            } catch (e: Exception) {
-                Log.e("Network Call has failed.", "${e.toString()}")
-                _isOffline.value = true
-            }
-        }
-
+        _selectedDate.value = date
     }
 //    @RequiresApi(Build.VERSION_CODES.O)
 //    fun getUpdatedClassSchedule(date:Long): List<ScheduleCardData>{

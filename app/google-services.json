@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "896685022921-705irc635mue3ut2uh3q7a7annnhdli3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.anshu.collegemate",
+            "certificate_hash": "d15a3e48a8eb8bad7e9c4684c22159c57600a234"
+          }
+        },
+        {
           "client_id": "896685022921-82rec0ktc3lgips832at9e8fdrqhuehp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

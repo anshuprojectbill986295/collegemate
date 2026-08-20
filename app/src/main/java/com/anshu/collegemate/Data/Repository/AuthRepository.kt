@@ -1,5 +1,6 @@
 package com.anshu.collegemate.Data.Repository
 
+import android.util.Log
 import com.anshu.collegemate.Data.Model.Login.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
@@ -11,7 +12,8 @@ class AuthRepository(
 
     suspend fun signInWithGoogle(idToken:String): AuthResult {
         return try
-        {       val credentials = GoogleAuthProvider.getCredential(idToken,null)
+        {
+            val credentials = GoogleAuthProvider.getCredential(idToken,null)
             val result = auth.signInWithCredential(credentials).await()
             val email =result.user?.email?:""
             if(!email.endsWith("cse.24@nitap.ac.in")){
@@ -28,7 +30,12 @@ class AuthRepository(
 
         }
         catch (e: Exception){
-            AuthResult.Error("Login Failed")
+            Log.e(
+                "GOOGLE_AUTH_ERROR",
+                "Exception type: ${e::class.java.name}\nMessage: ${e.message}",
+                e
+            )
+            AuthResult.Error("Login_Failed: ${e.message}")
         }
     }
 
