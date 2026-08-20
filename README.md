@@ -60,7 +60,6 @@ Authorized users can create assignments by entering the details, selecting a dea
 
 ![Add Assignment](screenshots/11-add-assignment.jpeg)
 
-> **Note:** The two class-cancellation workflow screenshots above were captured separately from the original 11-page screenshot document. Add them to the `screenshots/` folder using the filenames shown in the image references above.
 
 ---
 
