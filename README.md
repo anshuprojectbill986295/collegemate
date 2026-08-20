@@ -139,7 +139,6 @@ College Mate follows an **MVVM (Model–View–ViewModel)** architecture.
 - **Background Work:** WorkManager is used for scheduled local tasks such as birthday notifications.
 - **Dependency Management:** The current implementation uses manual dependency injection through repository / Firebase instances rather than a full Hilt-based Clean Architecture setup.
 
-> **Architecture note:** The project uses MVVM and repository-based separation. It does **not** claim to be a full multi-module Clean Architecture implementation.
 
 ---
 
@@ -201,7 +200,7 @@ Firestore snapshot listeners are integrated with Kotlin `Flow` / `callbackFlow`,
 
 The application has moved beyond the prototype stage and is currently being used by a real student group.
 
-Further expansion beyond the current pilot is not part of the current development scope.
+Further expansion beyond the current pilot i.e. to college level covering all students of my college depends on future stats.
 
 ---
 
@@ -248,4 +247,4 @@ NIT Arunachal Pradesh
 
 ## 📌 Project Note
 
-College Mate was built primarily as a practical solution to an academic communication problem within my batch. The current version is intentionally focused on the needs of the pilot group rather than being positioned as a universal college-management platform.
+College Mate was built primarily as a practical solution to an academic communication problem within my batch. The current version is intentionally focused on the needs of the pilot group rather than being positioned as a universal college-management platform. Further expansion beyond the current pilot i.e. to college level covering all students of my college depends on future statistics or numbers.
