@@ -22,44 +22,43 @@ The video demonstrates the main student workflows, including the daily schedule,
 
 Students can view the schedule for **Today, Tomorrow, or a selected date**, including subject, time, faculty, classroom, and syllabus access.
 
-![Today's Schedule](screenshots/01-todays-schedule.jpeg)
+<img src="screenshots/01-todays-schedule.jpeg" width="350">
 
 ### Real-Time Class Cancellation
 
 The class-cancellation workflow lets an authorized user select the date and affected class.
 
-![Select cancellation date](screenshots/05-class-cancellation-select-date.png)
+<img src="screenshots/05-class-cancellation-select-date.png" width="350">
 
-![Select class to cancel](screenshots/06-class-cancellation-select-class.png)
+<img src="screenshots/06-class-cancellation-select-class.png" width="350">
 
 Once a cancellation is published, the affected class is reflected directly in the schedule.
 
-![Cancelled classes in schedule](screenshots/04-class-cancellation-result.jpeg)
+<img src="screenshots/04-class-cancellation-result.jpeg" width="350">
 
 ### Centralized Announcements
 
 Important academic updates such as room changes, practical instructions, and other batch-wide information are available in one feed.
 
-![Announcements](screenshots/09-announcements.jpeg)
+<img src="screenshots/09-announcements.jpeg" width="350">
 
 ### Assignments & Tests
 
 Assignments and tests are organized in a unified academic dashboard with deadlines, test information, attachments, and details.
 
-![Assignments and Tests](screenshots/03-assignments-tests.jpeg)
+<img src="screenshots/03-assignments-tests.jpeg" width="350">
 
 ### Assignment Details
 
 Students can open an assignment to view its question/details, deadline, creator, and attached resources.
 
-![Assignment Details](screenshots/02-assignment-details.jpeg)
+<img src="screenshots/02-assignment-details.jpeg" width="350">
 
 ### Adding an Assignment
 
 Authorized users can create assignments by entering the details, selecting a deadline, and attaching files or images.
 
-![Add Assignment](screenshots/11-add-assignment.jpeg)
-
+<img src="screenshots/11-add-assignment.jpeg" width="350">
 
 ---
 
@@ -67,11 +66,11 @@ Authorized users can create assignments by entering the details, selecting a dea
 
 At our college, important academic information was commonly distributed through WhatsApp groups and PDF schedules. This created several practical problems:
 
-- Class cancellations and schedule changes could get buried in group messages.
-- Students had to repeatedly check WhatsApp for important updates.
-- Assignments and tests were scattered across conversations.
-- Students had to open PDF schedules repeatedly to check their daily routine.
-- Academic information was not centralized or consistently organized.
+* Class cancellations and schedule changes could get buried in group messages.
+* Students had to repeatedly check WhatsApp for important updates.
+* Assignments and tests were scattered across conversations.
+* Students had to open PDF schedules repeatedly to check their daily routine.
+* Academic information was not centralized or consistently organized.
 
 A survey of 30 students was conducted during the initial problem-identification stage. The results indicated strong interest in a dedicated academic application.
 
@@ -81,47 +80,54 @@ A survey of 30 students was conducted during the initial problem-identification 
 
 College Mate provides a centralized academic dashboard where students can:
 
-- Check their daily class schedule without opening PDFs.
-- View upcoming classes for tomorrow or another selected date.
-- Receive class-cancellation updates.
-- Read centralized academic announcements.
-- Track assignments and tests with deadlines and details.
-- Access attached academic resources.
-- Receive push notifications for important updates.
+* Check their daily class schedule without opening PDFs.
+* View upcoming classes for tomorrow or another selected date.
+* Receive class-cancellation updates.
+* Read centralized academic announcements.
+* Track assignments and tests with deadlines and details.
+* Access attached academic resources.
+* Receive push notifications for important updates.
 
 ---
 
 ## ✨ Key Features
 
 ### 📅 Real-Time Daily Routine
-- Today's, Tomorrow's, and selected-date schedule views.
-- Subject, faculty, time, classroom, and syllabus information.
-- Schedule changes are reflected from the backend in real time.
+
+* Today's, Tomorrow's, and selected-date schedule views.
+* Subject, faculty, time, classroom, and syllabus information.
+* Schedule changes are reflected from the backend in real time.
 
 ### 🚨 Class Cancellation Alerts
-- Authorized users can publish a class cancellation.
-- The affected class is marked as cancelled in the schedule.
-- Students receive push notifications through Firebase Cloud Messaging.
-- Cancellation announcements are retained in the announcement history.
+
+* Authorized users can publish a class cancellation.
+* The affected class is marked as cancelled in the schedule.
+* Students receive push notifications through Firebase Cloud Messaging.
+* Cancellation announcements are retained in the announcement history.
 
 ### 📢 Centralized Announcements
-- General academic announcements in one feed.
-- Dedicated class-cancellation announcements.
-- Persistent announcement history synchronized with Firestore.
+
+* General academic announcements in one feed.
+* Dedicated class-cancellation announcements.
+* Persistent announcement history synchronized with Firestore.
 
 ### 📝 Assignments & Tests
-- Unified dashboard for assignments and tests.
-- Deadlines and test information.
-- Assignment details and attachments.
-- Support for academic resources through attached files or links.
+
+* Unified dashboard for assignments and tests.
+* Deadlines and test information.
+* Assignment details and attachments.
+* Support for academic resources through attached files or links.
 
 ### 🎓 Elective-Based Routine Personalization
+
 The application resolves Open Elective schedules so that students can see the routine relevant to their elective combination.
 
 ### 🎂 Birthday Alerts
+
 Birthday information is used to generate scheduled local notifications through WorkManager.
 
 ### 🔔 Push Notifications
+
 Firebase Cloud Messaging (FCM) is used to deliver important announcements and cancellation alerts even when the application is not open.
 
 ---
@@ -130,15 +136,14 @@ Firebase Cloud Messaging (FCM) is used to deliver important announcements and ca
 
 College Mate follows an **MVVM (Model–View–ViewModel)** architecture.
 
-- **Model / Data Layer:** Firebase-backed repositories and application data models.
-- **ViewModel:** Manages UI state and coordinates data with Compose screens.
-- **View:** Jetpack Compose screens and reusable UI components.
-- **Repository Pattern:** Keeps Firebase data access separate from UI logic.
-- **Reactive State:** Kotlin `Flow` / `StateFlow` is used for observable application state.
-- **Navigation:** Jetpack Compose Navigation manages application routes.
-- **Background Work:** WorkManager is used for scheduled local tasks such as birthday notifications.
-- **Dependency Management:** The current implementation uses manual dependency injection through repository / Firebase instances rather than a full Hilt-based Clean Architecture setup.
-
+* **Model / Data Layer:** Firebase-backed repositories and application data models.
+* **ViewModel:** Manages UI state and coordinates data with Compose screens.
+* **View:** Jetpack Compose screens and reusable UI components.
+* **Repository Pattern:** Keeps Firebase data access separate from UI logic.
+* **Reactive State:** Kotlin `Flow` / `StateFlow` is used for observable application state.
+* **Navigation:** Jetpack Compose Navigation manages application routes.
+* **Background Work:** WorkManager is used for scheduled local tasks such as birthday notifications.
+* **Dependency Management:** The current implementation uses manual dependency injection through repository / Firebase instances rather than a full Hilt-based Clean Architecture setup.
 
 ---
 
@@ -146,12 +151,12 @@ College Mate follows an **MVVM (Model–View–ViewModel)** architecture.
 
 The application uses Firebase as its backend infrastructure:
 
-| Service | Purpose |
-|---|---|
-| **Firebase Authentication** | Google-based sign-in and institute-email access restriction |
-| **Cloud Firestore** | Stores academic data and provides real-time updates |
-| **Firebase Cloud Messaging (FCM)** | Push notifications for important updates |
-| **Firebase Storage** | Stores/serves selected academic resources and profile media |
+| Service                            | Purpose                                                     |
+| ---------------------------------- | ----------------------------------------------------------- |
+| **Firebase Authentication**        | Google-based sign-in and institute-email access restriction |
+| **Cloud Firestore**                | Stores academic data and provides real-time updates         |
+| **Firebase Cloud Messaging (FCM)** | Push notifications for important updates                    |
+| **Firebase Storage**               | Stores/serves selected academic resources and profile media |
 
 Firestore snapshot listeners are integrated with Kotlin `Flow` / `callbackFlow`, allowing relevant screens to react to backend changes without requiring a manual refresh.
 
@@ -160,31 +165,36 @@ Firestore snapshot listeners are integrated with Kotlin `Flow` / `callbackFlow`,
 ## 🛠️ Tech Stack
 
 **Language**
-- Kotlin
+
+* Kotlin
 
 **UI**
-- Jetpack Compose
-- Material 3
-- Coil
+
+* Jetpack Compose
+* Material 3
+* Coil
 
 **Architecture & Android**
-- MVVM
-- ViewModel
-- Kotlin Coroutines
-- Flow / StateFlow
-- Jetpack Compose Navigation
-- WorkManager
+
+* MVVM
+* ViewModel
+* Kotlin Coroutines
+* Flow / StateFlow
+* Jetpack Compose Navigation
+* WorkManager
 
 **Backend**
-- Firebase Authentication
-- Cloud Firestore
-- Firebase Cloud Messaging
-- Firebase Storage
+
+* Firebase Authentication
+* Cloud Firestore
+* Firebase Cloud Messaging
+* Firebase Storage
 
 **Development**
-- Git
-- GitHub
-- Android Studio
+
+* Git
+* GitHub
+* Android Studio
 
 ---
 
@@ -192,15 +202,15 @@ Firestore snapshot listeners are integrated with Kotlin `Flow` / `callbackFlow`,
 
 **Status:** 🟢 Working pilot / deployed MVP
 
-- **Current users:** 29 students
-- **Pilot group:** NIT Arunachal Pradesh CSE 2024 batch
-- **Authentication:** Restricted to the institute-email-based pilot group
-- **Distribution:** Firebase App Distribution
-- **Current release:** Version 1.1 (Version Code 2)
+* **Current users:** 29 students
+* **Pilot group:** NIT Arunachal Pradesh CSE 2024 batch
+* **Authentication:** Restricted to the institute-email-based pilot group
+* **Distribution:** Firebase App Distribution
+* **Current release:** Version 1.1 (Version Code 2)
 
 The application has moved beyond the prototype stage and is currently being used by a real student group.
 
-Further expansion beyond the current pilot i.e. to college level covering all students of my college depends on future stats.
+Further expansion beyond the current pilot, i.e. to college level covering all students of my college, depends on future stats.
 
 ---
 
@@ -218,9 +228,9 @@ For external reviewers, the **demo video and screenshots above provide a complet
 
 The initial survey of 30 students indicated:
 
-- **63%** preferred a dedicated app over WhatsApp for class updates.
-- **93%** wanted assignments and tests organized in one place.
-- **93%** wanted a simple, direct view of the day's schedule.
+* **63%** preferred a dedicated app over WhatsApp for class updates.
+* **93%** wanted assignments and tests organized in one place.
+* **93%** wanted a simple, direct view of the day's schedule.
 
 These findings helped define the initial MVP feature set.
 
@@ -240,11 +250,11 @@ The project provided practical experience with building and maintaining an appli
 
 **Anshu Kumar Gupta**
 
-B.Tech CSE  
+B.Tech CSE
 NIT Arunachal Pradesh
 
 ---
 
 ## 📌 Project Note
 
-College Mate was built primarily as a practical solution to an academic communication problem within my batch. The current version is intentionally focused on the needs of the pilot group rather than being positioned as a universal college-management platform. Further expansion beyond the current pilot i.e. to college level covering all students of my college depends on future statistics or numbers.
+College Mate was built primarily as a practical solution to an academic communication problem within my batch. The current version is intentionally focused on the needs of the pilot group rather than being positioned as a universal college-management platform. Further expansion beyond the current pilot, i.e. to college level covering all students of my college, depends on future statistics or numbers.
